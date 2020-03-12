@@ -1,0 +1,18 @@
+{
+  "name": "universitytycoon",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joaqu�n Campos <joaquin.campos@quickspin.com> (http://www.quickspin.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "@babylonjs/core": "~4.1.0",
+    "@babylonjs/materials": "~4.1.0",
+    "webpack": "~4.42.0",
+    "webpack-cli": "~3.3.11",
+    "webpack-dev-server": "~3.10.3"
+  }
+}
