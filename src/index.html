@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>University Tycoon</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
 
     <style>
         html,
@@ -25,8 +25,6 @@
 
 <body>
     <canvas id="game-container" touch-action="none"></canvas>
-
-    <script src="./dist/main.js"></script>
 </body>
 
 </html>
