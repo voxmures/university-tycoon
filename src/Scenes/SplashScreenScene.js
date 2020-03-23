@@ -4,13 +4,11 @@ import GameScene from "../Core/GameScene";
 
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Color3 } from "@babylonjs/core";
-import { ArcRotateCamera } from "@babylonjs/core/Cameras";
-import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { TargetCamera } from "@babylonjs/core/Cameras";
 import { StandardMaterial } from "@babylonjs/core";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 
 import { Texture } from "@babylonjs/core";
-import { GridMaterial } from "@babylonjs/materials/grid";
 
 // Required side effects to populate the Create methods on the mesh class. Without this, the bundle would be smaller but the createXXX methods from mesh would not be accessible.
 import "@babylonjs/core/Meshes/meshBuilder";
@@ -43,12 +41,8 @@ class SplashScreenScene extends GameScene {
 		this._scene.ambientColor = new Color3(1, 1, 1);
 
 		// Camera
-		const camera = new ArcRotateCamera("camera1", 3 * Math.PI / 2, Math.PI / 2, 5, Vector3.Zero(), this._scene);
-		camera.attachControl(this._engine.getRenderingCanvas(), true);
-
-		// Light
-		//const light = new HemisphericLight("light1", new Vector3(0, 1, 0), this._scene);
-		//light.intensity = 0.7;
+		const camera = new TargetCamera("camera1", new Vector3(0, 0, -5), this._scene);
+		camera.setTarget(Vector3.Zero());
 
 		// Logo
 		const logoMat = new StandardMaterial("logoMat", this._scene);
@@ -59,14 +53,9 @@ class SplashScreenScene extends GameScene {
 		logoMat.diffuseTexture.vOffset = -1.5;
 		logoMat.diffuseTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
 		logoMat.backFaceCulling = true;
-		logoMat.wirefrime = true;
 
 		const logo = Mesh.CreatePlane("logo", 3, this._scene);
 		logo.material = logoMat;
-
-		// Sphere
-		//const sphere = Mesh.CreateSphere("sphere1", 16, 2, this._scene);
-		//sphere.material = logoMat;
 	}
 }
 
