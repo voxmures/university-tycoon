@@ -3,7 +3,7 @@ import { Engine } from "@babylonjs/core/Engines/engine";
 import Time from "./Core/Time"; 
 import SceneManager from "./Core/SceneManager";
 
-import TestScene from "./Scenes/TestScene";
+import SplashScreenScene from "./Scenes/SplashScreenScene";
 
 // Get the canvas element from the DOM.
 const canvas = document.getElementById("game-container");
@@ -17,16 +17,18 @@ const time = new Time();
 // Creates Scene Manager
 const sceneManager = new SceneManager();
 
-const scene = new TestScene(engine);
+const scene = new SplashScreenScene(engine);
 
-sceneManager.add("TestScene", scene);
+sceneManager.add("SplashScreen", scene);
 
-sceneManager.load("TestScene");
+sceneManager.load("SplashScreen");
 
 // Render every frame
 engine.runRenderLoop(() => {
 	time.update();
 
-    sceneManager.activeScene.update(time.deltaTime);
-    sceneManager.activeScene.render();
+	if (sceneManager.activeScene) {
+    	sceneManager.activeScene.update(time.deltaTime);
+    	sceneManager.activeScene.render();
+	}
 });

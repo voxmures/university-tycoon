@@ -2,8 +2,13 @@
 class SceneManager {
 
 	constructor() {
-		this._activeScene = null;
 		this._scenes = {};
+		this._loading = null;
+		this._activeScene = null;
+	}
+
+	get activeScene() {
+		return this._activeScene;
 	}
 
 	add(key, scene) {
@@ -11,11 +16,19 @@ class SceneManager {
 	}
 
 	load(key) {
-		this._activeScene = this._scenes[key];
+		if (!this._loading) {
+			this._loading = this._scenes[key];
+			this._scenes[key].preload(this._onLoadedScene.bind(this));
+		}
 	}
 
-	get activeScene() {
-		return this._activeScene;
+	_onLoadedScene(result) {
+		if (result) {
+			this._activeScene = this._loading;
+			this._loading = null;
+
+			this._activeScene.init();
+		}
 	}
 }
 

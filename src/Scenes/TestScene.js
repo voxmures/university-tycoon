@@ -1,7 +1,6 @@
 // Test Scene
 import GameScene from "../Core/GameScene";
 
-import { Scene } from "@babylonjs/core/scene";
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
@@ -17,14 +16,9 @@ class TestScene extends GameScene {
 		super(engine);
 
 		this._sphere = null;	// Represents a sphere
-
-		this.init();
 	}
 
 	init() {
-		// Create our first scene.
-		this._scene = new Scene(this._engine);
-
 		// Camera
 		const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), this._scene);
 		camera.setTarget(Vector3.Zero());
