@@ -12,17 +12,15 @@ import "@babylonjs/core/Meshes/meshBuilder";
 
 class TestScene extends GameScene {
 
-	constructor(engine) {
-		super(engine);
-
-		this._sphere = null;	// Represents a sphere
+	setup() {
+		this._sphere = null;
 	}
 
 	init() {
 		// Camera
-		const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), this._scene);
+		const camera = new FreeCamera("camera2", new Vector3(0, 5, -10), this._scene);
 		camera.setTarget(Vector3.Zero());
-		camera.attachControl(this._engine.getRenderingCanvas(), true);
+		camera.attachControl(this._scene.getEngine().getRenderingCanvas(), true);
 
 		// Light
 		const light = new HemisphericLight("light1", new Vector3(0, 1, 0), this._scene);
@@ -41,7 +39,8 @@ class TestScene extends GameScene {
 		ground.material = material;
 	}
 
-	update(dt) {
+	update() {
+		const dt = this._system.time.deltaTime;
 		this._sphere.rotate(new Vector3(0, 1, 0), (Math.PI / 2) * (dt / 1000), 0);
 	}
 }

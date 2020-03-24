@@ -1,23 +1,30 @@
 // SplashScreenScene.js
 
 import GameScene from "../Core/GameScene";
+import Transition from "../GUI/Transition";
 
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Color3 } from "@babylonjs/core";
+
 import { TargetCamera } from "@babylonjs/core/Cameras";
 import { StandardMaterial } from "@babylonjs/core";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 
 import { Texture } from "@babylonjs/core";
 
+import { AdvancedDynamicTexture } from "@babylonjs/gui";
+
+import { gsap } from "gsap";
+
 // Required side effects to populate the Create methods on the mesh class. Without this, the bundle would be smaller but the createXXX methods from mesh would not be accessible.
 import "@babylonjs/core/Meshes/meshBuilder";
 
 class SplashScreenScene extends GameScene {
-	constructor(engine) {
-		super(engine);
 
-		this._textures = {};
+	setup() {
+		this._textures = {};	// Array of loaded textures
+
+		this._transition = null;	// Transition panel
 	}
 
 	preload(cb) {
@@ -49,13 +56,36 @@ class SplashScreenScene extends GameScene {
 		logoMat.ambientColor = new Color3(1, 1, 1);
 		logoMat.diffuseTexture = this._textures["logo"];
 		logoMat.diffuseTexture.hasAlpha = true;
-		logoMat.diffuseTexture.vScale = 3.87;
+		logoMat.diffuseTexture.vScale = 3.87;	// Image size: 1394 x 360 
 		logoMat.diffuseTexture.vOffset = -1.5;
 		logoMat.diffuseTexture.wrapV = Texture.CLAMP_ADDRESSMODE;
 		logoMat.backFaceCulling = true;
 
 		const logo = Mesh.CreatePlane("logo", 3, this._scene);
 		logo.material = logoMat;
+		logo.visibility = 0;
+
+		gsap.to(logo, {
+			delay: 1,
+			duration: 1,
+			visibility: 1
+		});
+
+		// Transition Panel
+		const rootUI = AdvancedDynamicTexture.CreateFullscreenUI("rootUI", true, this._scene);
+		
+		this._transition = new Transition();
+
+		rootUI.addControl(this._transition);
+
+		// Go to MenuScene
+		gsap.delayedCall(4, this._goToMenuScene.bind(this));
+	}
+
+	_goToMenuScene() {
+		this._transition.fadeIn(2, () => {
+			this._system.sceneManager.load("Test");
+		});
 	}
 }
 

@@ -1,9 +1,9 @@
 import { Engine } from "@babylonjs/core/Engines/engine";
 
-import Time from "./Core/Time"; 
-import SceneManager from "./Core/SceneManager";
+import System from "./Core/System";
 
 import SplashScreenScene from "./Scenes/SplashScreenScene";
+import TestScene from "./Scenes/TestScene";
 
 // Get the canvas element from the DOM.
 const canvas = document.getElementById("game-container");
@@ -11,24 +11,25 @@ const canvas = document.getElementById("game-container");
 // Associate a Babylon Engine to it.
 const engine = new Engine(canvas);
 
-// Creates Time manager
-const time = new Time();
+// Create game system
+const system = new System(engine);
 
-// Creates Scene Manager
-const sceneManager = new SceneManager();
+const splashScreen = new SplashScreenScene(system);
+const test = new TestScene(system);
 
-const scene = new SplashScreenScene(engine);
+const sceneManager = system.sceneManager;
 
-sceneManager.add("SplashScreen", scene);
+sceneManager.add("SplashScreen", splashScreen);
+sceneManager.add("Test", test);
 
 sceneManager.load("SplashScreen");
 
 // Render every frame
 engine.runRenderLoop(() => {
-	time.update();
+	system.time.update();
 
 	if (sceneManager.activeScene) {
-    	sceneManager.activeScene.update(time.deltaTime);
+    	sceneManager.activeScene.update();
     	sceneManager.activeScene.render();
 	}
 });

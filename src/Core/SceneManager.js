@@ -24,6 +24,10 @@ class SceneManager {
 
 	_onLoadedScene(result) {
 		if (result) {
+			if (this._activeScene) {
+				this._activeScene.dispose();
+			}
+
 			this._activeScene = this._loading;
 			this._loading = null;
 
