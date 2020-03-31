@@ -1,7 +1,9 @@
 // Time.js
 
 class Time {
-	constructor() {
+	constructor(system) {
+		this._system = system;
+
 		this._previousTime = (new Date).getTime();
 		this._currentTime = (new Date).getTime();
 	}

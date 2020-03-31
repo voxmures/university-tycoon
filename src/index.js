@@ -22,14 +22,10 @@ const sceneManager = system.sceneManager;
 sceneManager.add("SplashScreen", splashScreen);
 sceneManager.add("Test", test);
 
-sceneManager.load("SplashScreen");
-
 // Render every frame
 engine.runRenderLoop(() => {
-	system.time.update();
+	system.time.update();	// Update time
 
-	if (sceneManager.activeScene) {
-    	sceneManager.activeScene.update();
-    	sceneManager.activeScene.render();
-	}
+	sceneManager.update();
+	sceneManager.render();
 });

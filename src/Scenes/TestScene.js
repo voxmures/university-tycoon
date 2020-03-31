@@ -6,6 +6,7 @@ import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { GridMaterial } from "@babylonjs/materials/grid";
+import { StandardMaterial } from "@babylonjs/core";
 
 // Required side effects to populate the Create methods on the mesh class. Without this, the bundle would be smaller but the createXXX methods from mesh would not be accessible.
 import "@babylonjs/core/Meshes/meshBuilder";
@@ -27,16 +28,20 @@ class TestScene extends GameScene {
 		light.intensity = 0.7;
 
 		// Material
-		const material = new GridMaterial("grid", this._scene);
+		const sphereMat = new GridMaterial("sphereMat", this._scene);
+		
+		const groundMat = new StandardMaterial("groundMat", this._scene);
+		groundMat.diffuseTexture = this._system.loader.getAssetByKey("logo");
+		groundMat.diffuseTexture.hasAlpha = true;
 
 		// Sphere
 		this._sphere = Mesh.CreateSphere("sphere1", 16, 2, this._scene);
 		this._sphere.position.y = 2;
-		this._sphere.material = material;
+		this._sphere.material = sphereMat;
 
 		// Ground
 		const ground = Mesh.CreateGround("ground1", 6, 6, 2, this._scene);
-		ground.material = material;
+		ground.material = groundMat;
 	}
 
 	update() {

@@ -22,24 +22,11 @@ import "@babylonjs/core/Meshes/meshBuilder";
 class SplashScreenScene extends GameScene {
 
 	setup() {
-		this._textures = {};	// Array of loaded textures
-
 		this._transition = null;	// Transition panel
 	}
 
-	preload(cb) {
-		this._loader.addTextureTask("logo", "content/uoc_logo.png");
-	
-		this._loader.onFinish = (tasks) => {
-			
-			for (let task of tasks) {
-				this._textures[task.name] = task.texture;
-			}
-
-			cb(true);
-		};
-
-		this._loader.load();
+	preload() {
+		this._system.loader.add("logo", "content/uoc_logo.png");
 	}
 
 	init() {
@@ -54,7 +41,7 @@ class SplashScreenScene extends GameScene {
 		// Logo
 		const logoMat = new StandardMaterial("logoMat", this._scene);
 		logoMat.ambientColor = new Color3(1, 1, 1);
-		logoMat.diffuseTexture = this._textures["logo"];
+		logoMat.diffuseTexture = this._system.loader.getAssetByKey("logo");
 		logoMat.diffuseTexture.hasAlpha = true;
 		logoMat.diffuseTexture.vScale = 3.87;	// Image size: 1394 x 360 
 		logoMat.diffuseTexture.vOffset = -1.5;
@@ -84,7 +71,8 @@ class SplashScreenScene extends GameScene {
 
 	_goToMenuScene() {
 		this._transition.fadeIn(2, () => {
-			this._system.sceneManager.load("Test");
+			this._system.sceneManager.stop("SplashScreen");
+			this._system.sceneManager.start("Test");
 		});
 	}
 }
