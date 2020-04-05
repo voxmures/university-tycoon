@@ -26,7 +26,7 @@ class SplashScreenScene extends GameScene {
 	}
 
 	preload() {
-		this._system.loader.add("logo", "content/uoc_logo.png");
+		this._system.loader.add("logo", "content/images/uoc_logo.png");
 	}
 
 	init() {
@@ -73,6 +73,7 @@ class SplashScreenScene extends GameScene {
 		this._transition.fadeIn(2, () => {
 			this._system.sceneManager.stop("SplashScreen");
 			this._system.sceneManager.start("Test");
+			this._system.sceneManager.start("GUI");
 		});
 	}
 }

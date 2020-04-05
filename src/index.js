@@ -1,31 +1,45 @@
+import "@fortawesome/fontawesome-free/css/fontawesome.css";
+import "@fortawesome/fontawesome-free/css/solid.css";
+
+import FontFaceObserver from "fontfaceobserver";
+
 import { Engine } from "@babylonjs/core/Engines/engine";
 
 import System from "./Core/System";
 
 import SplashScreenScene from "./Scenes/SplashScreenScene";
 import TestScene from "./Scenes/TestScene";
+import GUIScene from "./Scenes/GUIScene";
 
-// Get the canvas element from the DOM.
-const canvas = document.getElementById("game-container");
+const font = new FontFaceObserver("Font Awesome 5 Free", { weight: 900, style: 'normal' });
 
-// Associate a Babylon Engine to it.
-const engine = new Engine(canvas);
+font.load().then(() => {
 
-// Create game system
-const system = new System(engine);
+	// Get the canvas element from the DOM.
+	const canvas = document.getElementById("game-container");
 
-const splashScreen = new SplashScreenScene(system);
-const test = new TestScene(system);
+	// Associate a Babylon Engine to it.
+	const engine = new Engine(canvas);
 
-const sceneManager = system.sceneManager;
+	// Create game system
+	const system = new System(engine);
 
-sceneManager.add("SplashScreen", splashScreen);
-sceneManager.add("Test", test);
+	const splashScreen = new SplashScreenScene(system);
+	const test = new TestScene(system);
+	const gui = new GUIScene(system);
 
-// Render every frame
-engine.runRenderLoop(() => {
-	system.time.update();	// Update time
+	const sceneManager = system.sceneManager;
 
-	sceneManager.update();
-	sceneManager.render();
+	sceneManager.add("SplashScreen", splashScreen);
+	sceneManager.add("Test", test);
+	sceneManager.add("GUI", gui);
+
+	// Render every frame
+	engine.runRenderLoop(() => {
+		system.time.update();	// Update time
+
+		sceneManager.update();
+		sceneManager.render();
+	});
+
 });
