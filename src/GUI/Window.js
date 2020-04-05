@@ -39,6 +39,8 @@ class Window extends Rectangle {
 		header.isVertical = false;
 		header.width = (options.width || DEFAULT_WIDTH) + "px";
 		header.height = headerHeight + "px";
+		header.fontFamily = "Font Awesome 5 Free";
+		header.fontWeight = 900;
 		panel.addControl(header);
 
 		const textWidth = (options.width || DEFAULT_WIDTH) * 0.9;
@@ -57,11 +59,9 @@ class Window extends Rectangle {
 	    header.addControl(title);
 
 	    var closeButton = new Button.CreateSimpleButton("closeButton", "\uf00d");
-	    closeButton.fontSize = 32;
 	    closeButton.color = "black";
-	    closeButton.fontFamily = "Font Awesome 5 Free";
+	    closeButton.fontFamily = "'Font Awesome 5 Free'";
 	    closeButton.fontWeight = 900;
-	    closeButton.text = "\uf00d";
 	    closeButton.width = ((options.width || DEFAULT_WIDTH) - textWidth) + 'px'; // paddingLeft is subtracted
 	    closeButton.height = headerHeight + 'px';
 	    closeButton.thickness = 0;

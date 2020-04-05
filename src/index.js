@@ -1,4 +1,4 @@
-import "@fortawesome/fontawesome-free/css/fontawesome.css";
+//import "@fortawesome/fontawesome-free/css/fontawesome.css";
 import "@fortawesome/fontawesome-free/css/solid.css";
 
 import FontFaceObserver from "fontfaceobserver";
@@ -13,6 +13,7 @@ import GUIScene from "./Scenes/GUIScene";
 
 const font = new FontFaceObserver("Font Awesome 5 Free", { weight: 900, style: 'normal' });
 
+// Wait until the font is loaded, so it can be used in our canvas
 font.load().then(() => {
 
 	// Get the canvas element from the DOM.

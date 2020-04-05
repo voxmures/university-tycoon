@@ -3,6 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	mode: "development",
@@ -15,7 +16,25 @@ module.exports = {
 		rules: [
 			{
 				test: /\.css$/i,
-				use: ["style-loader", "css-loader"]
+				use: [
+					// {
+					// 	loader: "style-loader",
+					// 	options: {
+					// 		injectType: "linkTag"
+					// 	}
+					// },
+					// {
+					// 	loader: "file-loader",
+					// 	options: {
+					// 		name: "[name].[ext]",
+					// 		outputPath: "./content/css/",
+					// 	}
+					// }
+					{
+						loader: MiniCssExtractPlugin.loader
+					},
+					"css-loader",
+				]
 			},
 			{
 				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -23,7 +42,7 @@ module.exports = {
 					loader: "file-loader",
 					options: {
 						name: "[name].[ext]",
-						outputPath: "./content/fonts"
+						outputPath: "./content/fonts/"
 					}
 				}
 			},
@@ -34,6 +53,7 @@ module.exports = {
 			title: "University Tycoon Development Server",
 			template: "./src/index.html"
 		}),
+		new MiniCssExtractPlugin(),
 		new WriteFilePlugin(),
 		new CopyPlugin([
 			{ from: "./content", to: path.resolve(__dirname, "dist/content")}
