@@ -8,18 +8,22 @@ import { Button } from "@babylonjs/gui";
 
 import { Control } from "@babylonjs/gui/2D/controls/";
 
+import WindowEvent from "./WindowEvent";
+
 const DEFAULT_WIDTH = 240;
 const DEFAULT_HEIGHT = 240;
 
 class Window extends Rectangle {
-	constructor(name, options) {
+	constructor(name, options, parent) {
 		super(name);
+		this._parent = parent;	// Parent GameScene
 
 		this._init(options || {});
 	}
 
 	_init(options) {
 		this.isPointerBlocker = true;
+		this.onPointerClickObservable.add(this._onClick.bind(this));
 
 		this.width = (options.width || DEFAULT_WIDTH) + "px";
 		this.height = (options.height || DEFAULT_HEIGHT) + "px";
@@ -46,7 +50,7 @@ class Window extends Rectangle {
 		const textWidth = (options.width || DEFAULT_WIDTH) * 0.9;
 
 	    const title = new TextBlock();
-	    title.text = "Modal Title \uf00d";
+	    title.text = options.title || "Window Title";
 	    title.color = "black";
 	    title.fontSize = 12;
 	    title.fontStyle = 'bold';
@@ -66,6 +70,10 @@ class Window extends Rectangle {
 	    closeButton.height = headerHeight + 'px';
 	    closeButton.thickness = 0;
 	    header.addControl(closeButton)
+	}
+
+	_onClick() {
+		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.WINDOW_CLICKED, this));
 	}
 }
 

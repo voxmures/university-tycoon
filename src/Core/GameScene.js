@@ -14,6 +14,10 @@ class GameScene {
 		this.setup();
 	}
 
+	get system() {
+		return this._system;
+	}
+
 	get state() {
 		return this._state;
 	}

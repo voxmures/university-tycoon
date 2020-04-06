@@ -7,7 +7,7 @@ class EventBus {
 		this._listeners = {};
 	}
 
-	listenTo(id, callback, context = this) {
+	listenTo(id, callback, context = null) {
 		if (!this._listeners[id]) {
 			this._listeners[id] = [];
 		}
