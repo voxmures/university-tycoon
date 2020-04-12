@@ -16,5 +16,6 @@ class WindowEvent extends Event {
 }
 
 WindowEvent.WINDOW_CLICKED = "WindowEvent.WINDOW_CLICKED";
+WindowEvent.START_MOUSE_MOVE = "WindowEvent.START_MOUSE_MOVE";
 
 export default WindowEvent;

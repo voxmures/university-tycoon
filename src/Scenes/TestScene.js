@@ -21,7 +21,7 @@ class TestScene extends GameScene {
 		// Camera
 		const camera = new FreeCamera("camera2", new Vector3(0, 5, -10), this._scene);
 		camera.setTarget(Vector3.Zero());
-		camera.attachControl(this._scene.getEngine().getRenderingCanvas(), true);
+		//camera.attachControl(this._scene.getEngine().getRenderingCanvas(), true);
 
 		// Light
 		const light = new HemisphericLight("light1", new Vector3(0, 1, 0), this._scene);

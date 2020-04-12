@@ -27,9 +27,10 @@ class Window extends Rectangle {
 
 		this.width = (options.width || DEFAULT_WIDTH) + "px";
 		this.height = (options.height || DEFAULT_HEIGHT) + "px";
-		this.background = "white";
-		this.color = "#000078";
-		this.thickness = 4;
+		this.background = "#DCDCDC";
+		this.cornerRadius = 2;
+		this.color = "#000000";
+		this.thickness = 1;
 
 		const panel = new StackPanel();
 		panel.width = (options.width || DEFAULT_WIDTH) + "px";
@@ -37,43 +38,73 @@ class Window extends Rectangle {
 		panel.panelVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
 		this.addControl(panel);
 
+		const header = this._generateHeader(options);
+		header.onPointerDownObservable.add(this._startMouseMove.bind(this));
+
+		panel.addControl(header);
+		panel.addControl(this._generateBody(options));
+	}
+
+	_generateHeader(options) {
 		const headerHeight = (options.height || DEFAULT_HEIGHT) / 6;
 
 		const header = new StackPanel();
 		header.isVertical = false;
 		header.width = (options.width || DEFAULT_WIDTH) + "px";
 		header.height = headerHeight + "px";
-		header.fontFamily = "Font Awesome 5 Free";
-		header.fontWeight = 900;
-		panel.addControl(header);
 
-		const textWidth = (options.width || DEFAULT_WIDTH) * 0.9;
+		const textWidth = (options.width || DEFAULT_WIDTH) * 0.95;
 
 	    const title = new TextBlock();
 	    title.text = options.title || "Window Title";
 	    title.color = "black";
 	    title.fontSize = 12;
-	    title.fontStyle = 'bold';
+	    title.fontStyle = "bold";
 	    title.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
 	    title.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-	    title.width = textWidth + 'px';
-	    title.height = headerHeight + 'px';
-	    title.paddingLeft = ((options.width || DEFAULT_WIDTH) * 0.02) + 'px';
-	    title.paddingTop = (headerHeight * 0.35) + 'px';
-	    header.addControl(title);
+	    title.width = textWidth + "px";
+	    title.height = headerHeight + "px";
+	    title.paddingLeft = ((options.width || DEFAULT_WIDTH) * 0.02) + "px";
+	    title.paddingTop = (headerHeight * 0.35) + "px";
 
 	    var closeButton = new Button.CreateSimpleButton("closeButton", "\uf00d");
-	    closeButton.color = "black";
+	    closeButton.color = "#000000";
 	    closeButton.fontFamily = "'Font Awesome 5 Free'";
 	    closeButton.fontWeight = 900;
-	    closeButton.width = ((options.width || DEFAULT_WIDTH) - textWidth) + 'px'; // paddingLeft is subtracted
-	    closeButton.height = headerHeight + 'px';
+	    closeButton.textBlock.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		closeButton.textBlock.paddingRight = ((options.width || DEFAULT_WIDTH) * 0.02) + "px";
+	    closeButton.width = ((options.width || DEFAULT_WIDTH) - textWidth) + "px"; // paddingLeft is subtracted
+	    closeButton.height = headerHeight + "px";
 	    closeButton.thickness = 0;
-	    header.addControl(closeButton)
+
+	   	header.addControl(title);
+	    header.addControl(closeButton);
+
+	    return header;
+	}
+
+	_generateBody(options) {
+		const width = (options.width || DEFAULT_WIDTH) * 0.98;
+		const height = ((options.height || DEFAULT_HEIGHT) * 5 / 6) * 0.98;
+
+		const body = new Rectangle();
+		body.width = width + "px";
+		body.height = height + "px";
+		body.left = "1px";
+		body.background = "#D3D3D3";
+		body.cornerRadius = 2;
+		body.color = "#000000";
+		body.thickness = 1;
+
+		return body;
 	}
 
 	_onClick() {
 		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.WINDOW_CLICKED, this));
+	}
+
+	_startMouseMove() {
+		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.START_MOUSE_MOVE, this));
 	}
 }
 
