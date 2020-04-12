@@ -23,9 +23,10 @@ class GUIScene extends GameScene {
 
 		this._windows = [];
 
-		this._target = null;
+		this._focus = null;
 
-		this._system.bus.listenTo(WindowEvent.WINDOW_CLICKED, this._onWindowClicked, this);
+		this._system.bus.listenTo(WindowEvent.WINDOW_FOCUS, this._onWindowFocus, this);
+		this._system.bus.listenTo(WindowEvent.WINDOW_CLOSE, this._onWindowClose, this);
 		this._system.bus.listenTo(WindowEvent.START_MOUSE_MOVE, this._onStartMouseMove, this);
 
 		this._onMouseMoveCallback = this._onMouseMove.bind(this);
@@ -45,15 +46,11 @@ class GUIScene extends GameScene {
 		const testWindow = new Window("Test", {
 			width: this._system.engine.getRenderWidth() / 4,
 			height: this._system.engine.getRenderHeight() / 4,
-			title: "Window 1"
+			title: "Window 1",
+			isMoveable: true
 		}, this);
 		testWindow.zIndex = 1;
 		this._rootUI.addControl(testWindow);
-
-		const trackingSphere = Mesh.CreateSphere("trackingSphere1", 1, .1, this._scene);
-		trackingSphere.scaling = new Vector3(.1, .1, .1);
-		trackingSphere.isVisible = false;
-		testWindow.linkWithMesh(trackingSphere);
 
 		this._windows.push(testWindow);
 
@@ -68,24 +65,49 @@ class GUIScene extends GameScene {
 		this._windows.push(testWindow2);
 	}
 
-	_onWindowClicked(e) {
-		const index = this._windows.indexOf(e.target);
+	_sortWindows(target) {
+		const index = this._windows.indexOf(target);
 		if (index >= 0) {
 			this._windows.splice(index, 1);
-			this._windows.unshift(e.target);
+			this._windows.unshift(target);
 
-			e.target.zIndex = this._windows.length;
+			target.zIndex = this._windows.length;
 			for (let i = 1; i <= index; i++) {
 				this._windows[i].zIndex -= 1;
 			}
 		}
 	}
 
-	_onStartMouseMove(e) {
-		this._target = e.target;
+	_closeWindow(target) {
+		const index = this._windows.indexOf(target);
+		if (index >= 0) {
+			this._windows.splice(index, 1);
+		}
 
-		this._target.linkOffsetXInPixels = this._target.centerX - this._scene.pointerX;
-		this._target.linkOffsetYInPixels = this._target.centerY - this._scene.pointerY;
+		target.dispose();
+	}
+
+	_onWindowFocus(e) {
+		this._sortWindows(e.target);
+	}
+
+	_onWindowClose(e) {
+		this._closeWindow(e.target);
+	}
+
+	_onStartMouseMove(e) {
+		this._focus = e.target;
+
+		const trackingSphere = Mesh.CreateSphere("trackingSphere1", 1, .1, this._scene);
+		trackingSphere.scaling = new Vector3(.1, .1, .1);
+		trackingSphere.isVisible = false;
+
+		trackingSphere.position = this._getMousePositionInWorldCoord();
+
+		this._focus.linkWithMesh(trackingSphere);
+
+		this._focus.linkOffsetXInPixels = this._focus.centerX - this._scene.pointerX;
+		this._focus.linkOffsetYInPixels = this._focus.centerY - this._scene.pointerY;
 
 		const canvas = this.system.engine.getRenderingCanvas();
 		canvas.addEventListener("pointermove", this._onMouseMoveCallback, false);
@@ -97,15 +119,17 @@ class GUIScene extends GameScene {
 		canvas.removeEventListener("pointermove", this._onMouseMoveCallback);
 		canvas.removeEventListener("pointerup", this._onEndMouseMoveCallback);
 
-		this._target = null;
+		this._focus.linkedMesh.dispose();
+		this._focus.linkWithMesh(null);
+
+		this._focus = null;
 	}
 
 	_onMouseMove(e) {
-		const position = this._getMousePosition();
-		this._target.linkedMesh.position = new Vector3(position.x, position.y, position.z);
+		this._focus.linkedMesh.position = this._getMousePositionInWorldCoord();
 	}
 
-	_getMousePosition() {
+	_getMousePositionInWorldCoord() {
 		const canvas = this.system.engine.getRenderingCanvas();
 
 		const position = Vector3.Unproject(

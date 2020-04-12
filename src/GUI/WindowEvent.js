@@ -15,7 +15,8 @@ class WindowEvent extends Event {
 	}
 }
 
-WindowEvent.WINDOW_CLICKED = "WindowEvent.WINDOW_CLICKED";
+WindowEvent.WINDOW_FOCUS = "WindowEvent.WINDOW_FOCUS";
+WindowEvent.WINDOW_CLOSE = "WindowEvent.WINDOW_CLOSE";
 WindowEvent.START_MOUSE_MOVE = "WindowEvent.START_MOUSE_MOVE";
 
 export default WindowEvent;

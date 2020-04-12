@@ -23,7 +23,7 @@ class Window extends Rectangle {
 
 	_init(options) {
 		this.isPointerBlocker = true;
-		this.onPointerClickObservable.add(this._onClick.bind(this));
+		this.onPointerDownObservable.add(this._onClick.bind(this));
 
 		this.width = (options.width || DEFAULT_WIDTH) + "px";
 		this.height = (options.height || DEFAULT_HEIGHT) + "px";
@@ -39,7 +39,11 @@ class Window extends Rectangle {
 		this.addControl(panel);
 
 		const header = this._generateHeader(options);
-		header.onPointerDownObservable.add(this._startMouseMove.bind(this));
+
+		if (options.isMoveable) {
+			header.isPointerBlocker = true;
+			header.onPointerDownObservable.add(this._startMouseMove.bind(this));
+		}
 
 		panel.addControl(header);
 		panel.addControl(this._generateBody(options));
@@ -77,6 +81,8 @@ class Window extends Rectangle {
 	    closeButton.height = headerHeight + "px";
 	    closeButton.thickness = 0;
 
+	    closeButton.onPointerClickObservable.add(this._onClose.bind(this));
+
 	   	header.addControl(title);
 	    header.addControl(closeButton);
 
@@ -100,10 +106,16 @@ class Window extends Rectangle {
 	}
 
 	_onClick() {
-		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.WINDOW_CLICKED, this));
+		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.WINDOW_FOCUS, this));
+	}
+
+	_onClose() {
+		this._onClick();
+		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.WINDOW_CLOSE, this));
 	}
 
 	_startMouseMove() {
+		this._onClick();
 		this._parent.system.bus.dispatch(new WindowEvent(WindowEvent.START_MOUSE_MOVE, this));
 	}
 }
