@@ -57,7 +57,7 @@ class Window extends Rectangle {
 		header.width = (options.width || DEFAULT_WIDTH) + "px";
 		header.height = headerHeight + "px";
 
-		const textWidth = (options.width || DEFAULT_WIDTH) * 0.95;
+		const textWidth = (options.width || DEFAULT_WIDTH) * 0.9;
 
 	    const title = new TextBlock();
 	    title.text = options.title || "Window Title";
@@ -71,13 +71,13 @@ class Window extends Rectangle {
 	    title.paddingLeft = ((options.width || DEFAULT_WIDTH) * 0.02) + "px";
 	    title.paddingTop = (headerHeight * 0.35) + "px";
 
-	    var closeButton = new Button.CreateSimpleButton("closeButton", "\uf00d");
+	    const buttonWidth = (options.width || DEFAULT_WIDTH) - textWidth;
+
+	    const closeButton = new Button.CreateSimpleButton("closeButton", "\uf00d");
 	    closeButton.color = "#000000";
 	    closeButton.fontFamily = "'Font Awesome 5 Free'";
 	    closeButton.fontWeight = 900;
-	    closeButton.textBlock.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
-		closeButton.textBlock.paddingRight = ((options.width || DEFAULT_WIDTH) * 0.02) + "px";
-	    closeButton.width = ((options.width || DEFAULT_WIDTH) - textWidth) + "px"; // paddingLeft is subtracted
+	    closeButton.width = buttonWidth + "px"; // paddingLeft is subtracted
 	    closeButton.height = headerHeight + "px";
 	    closeButton.thickness = 0;
 

@@ -7,8 +7,10 @@ import { Engine } from "@babylonjs/core/Engines/engine";
 
 import System from "./Core/System";
 
+import GameManager from "./Game/GameManager";
+
 import SplashScreenScene from "./Scenes/SplashScreenScene";
-import TestScene from "./Scenes/TestScene";
+import PersistenceScene from "./Scenes/PersistenceScene";
 import GUIScene from "./Scenes/GUIScene";
 
 const font = new FontFaceObserver("Font Awesome 5 Free", { weight: 900, style: 'normal' });
@@ -25,14 +27,16 @@ font.load().then(() => {
 	// Create game system
 	const system = new System(engine);
 
-	const splashScreen = new SplashScreenScene(system);
-	const test = new TestScene(system);
-	const gui = new GUIScene(system);
+	const game = new GameManager(system);
+
+	const splashScreen = new SplashScreenScene(system, game);
+	const persistence = new PersistenceScene(system, game);
+	const gui = new GUIScene(system, game);
 
 	const sceneManager = system.sceneManager;
 
 	sceneManager.add("SplashScreen", splashScreen);
-	sceneManager.add("Test", test);
+	sceneManager.add("Persistence", persistence);
 	sceneManager.add("GUI", gui);
 
 	// Render every frame
@@ -41,6 +45,10 @@ font.load().then(() => {
 
 		sceneManager.update();
 		sceneManager.render();
+	});
+
+	window.addEventListener("resize", () => {
+		engine.resize();
 	});
 
 });

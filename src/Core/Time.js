@@ -4,8 +4,8 @@ class Time {
 	constructor(system) {
 		this._system = system;
 
-		this._previousTime = (new Date).getTime();
-		this._currentTime = (new Date).getTime();
+		this._previousTime = (new Date).getTime();	// Last fetched time in milliseconds
+		this._currentTime = (new Date).getTime();	// Time in milliseconds since the start of the game
 	}
 
 	get deltaTime() {

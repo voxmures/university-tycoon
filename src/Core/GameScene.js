@@ -4,8 +4,9 @@ import { AssetsManager } from "@babylonjs/core";
 import { Scene } from "@babylonjs/core/scene";
 
 class GameScene {
-	constructor(system) {
+	constructor(system, game) {
 		this._system = system;	// Game system
+		this._game = game;  // Game Manager
 
 		this._scene = new Scene(this._system.engine);	// Babylon Scene object reference
 
@@ -16,6 +17,10 @@ class GameScene {
 
 	get system() {
 		return this._system;
+	}
+
+	get game() {
+		return this._game;
 	}
 
 	get state() {
