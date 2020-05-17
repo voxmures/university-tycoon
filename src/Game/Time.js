@@ -1,12 +1,16 @@
-// GameTime.js
+// Time.js
 
 const TIME_THRESHOLD = 1000;
 
-class GameTime {
+class Time {
 	
 	constructor() {
 		this._time = 0;
 		this._accumulatedDeltaTime = 0;
+	}
+
+	get current() {
+		return this._time;
 	}
 
 	update(dt) {
@@ -18,10 +22,6 @@ class GameTime {
 			this._accumulatedDeltaTime = this._accumulatedDeltaTime % TIME_THRESHOLD;
 		}
 	}
-
-	get current() {
-		return this._time;
-	}
 }
 
-export default GameTime;
+export default Time;

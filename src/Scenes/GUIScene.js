@@ -1,4 +1,5 @@
 // GUIScene.js
+// Actual user interface to interact with the game
 
 import GameScene from "../Core/GameScene";
 import Window from "../GUI/Window";
@@ -38,7 +39,7 @@ class GUIScene extends GameScene {
 		this._scene.autoClear = false;
 
 		// Camera
-		this._camera = new TargetCamera("camera1", new Vector3(0, 0, -5), this._scene);
+		this._camera = new TargetCamera("cameraGUI", new Vector3(0, 0, -5), this._scene);
 		this._camera.setTarget(Vector3.Zero());
 
 		this._rootUI = AdvancedDynamicTexture.CreateFullscreenUI("rootUI", true, this._scene);

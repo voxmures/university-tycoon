@@ -68,6 +68,8 @@ class SceneManager {
 		}
 
 		this._scenes[key].state === SceneState.STOPPED;
+
+		// TODO: Stopped scenes clean up?
 	}
 
 	// Update the active scenes

@@ -1,6 +1,5 @@
 // GameScene.js
 
-import { AssetsManager } from "@babylonjs/core";
 import { Scene } from "@babylonjs/core/scene";
 
 class GameScene {

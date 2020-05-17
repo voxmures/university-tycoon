@@ -72,8 +72,7 @@ class SplashScreenScene extends GameScene {
 	_goToMenuScene() {
 		this._transition.fadeIn(2, () => {
 			this._system.sceneManager.stop("SplashScreen");
-			this._system.sceneManager.start("Persistence");
-			this._system.sceneManager.start("GUI");
+			this._system.sceneManager.start("Gameplay");
 		});
 	}
 }
