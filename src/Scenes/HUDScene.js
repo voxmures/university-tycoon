@@ -16,6 +16,8 @@ import { Button } from "@babylonjs/gui";
 
 import { Control } from "@babylonjs/gui/2D/controls/";
 
+import { Sound } from "@babylonjs/core";
+
 const SCOREBOARD_SIZE = { 
 	width: 150,
 	height: 50
@@ -29,6 +31,8 @@ class HUDScene extends GameScene {
 
 		this._timeCtrl = {};
 		this._scoreboard = {};
+
+		this._clickSFX = null;
 	}
 
 	init() {
@@ -43,6 +47,11 @@ class HUDScene extends GameScene {
 	
 		this._timeCtrl = this._generateTimeCtrl(this._rootUI);
 		this._scoreboard = this._generateScoreboard(this._rootUI);
+
+		this._clickSFX = new Sound("clickSFX", this._system.loader.getAssetByKey("clickSFX"), this._scene, null, {
+			autoplay: false,
+			loop: false
+		});
 	}
 
 	_generateTimeCtrl(parent) {
@@ -210,6 +219,8 @@ class HUDScene extends GameScene {
 
 			this._timeCtrl.pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_On");
 			this._timeCtrl.pauseButton.color = "#FFFFFF";
+
+			this._clickSFX.play();
 		}
 	}
 
@@ -222,6 +233,8 @@ class HUDScene extends GameScene {
 
 			this._timeCtrl.pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_Off");
 			this._timeCtrl.pauseButton.color = "#1EA7E1";
+
+			this._clickSFX.play();
 		}
 	}
 

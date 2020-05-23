@@ -39,8 +39,8 @@ font.load().then(() => {
 
 	sceneManager.add("SplashScreen", splashScreen);
 	sceneManager.add("Gameplay", gameplay);
-	sceneManager.add("HUD", hud);
 	sceneManager.add("GUI", gui);
+	sceneManager.add("HUD", hud);
 
 	// Render every frame
 	engine.runRenderLoop(() => {

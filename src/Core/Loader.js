@@ -6,6 +6,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { AssetsManager } from "@babylonjs/core/Misc";
 import { TextureAssetTask } from "@babylonjs/core/Misc";
 import { ImageAssetTask } from "@babylonjs/core/Misc";
+import { BinaryFileAssetTask } from "@babylonjs/core/Misc";
 
 import LoaderEvent from "./LoaderEvent";
 
@@ -30,6 +31,9 @@ class Loader {
 				break;
 			case ImageAssetTask:
 				this._assets[task.name] = task.image;
+				break;
+			case BinaryFileAssetTask:
+				this._assets[task.name] = task.data;
 				break;
 			default:
 				console.error("Loader:", `Error loading asset ${task.name}. Unrecognized AssetManager task type.`);
@@ -58,7 +62,6 @@ class Loader {
 		if (options.task) {
 			switch (options.task) {
 				case ImageAssetTask:
-					console.log("LOADS AN IMAGEHTML!");
 					assetTask = this._assetsManager.addImageTask(key, path);
 					break;
 				case TextureAssetTask:
@@ -72,6 +75,9 @@ class Loader {
 			switch (fileExt) {
 				case "png":
 					assetTask = this._assetsManager.addTextureTask(key, path);
+					break;
+				case "ogg":
+					assetTask = this._assetsManager.addBinaryFileTask(key, path);
 					break;
 				default:
 					console.error("Loader:", `Error loading asset ${key}. Unrecognized file extension.`);
