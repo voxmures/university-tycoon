@@ -3,14 +3,16 @@
 
 import GameScene from "../Core/GameScene";
 
+import { ImageAssetTask } from "@babylonjs/core/Misc";
+
 class GameplayScene extends GameScene {
 
 	preload() {
-		this._system.loader.add("greyPanel", "content/images/grey_panel.png");
-		this._system.loader.add("blueButton_On", "content/images/blue_button_on.png");
-		this._system.loader.add("blueButton_Off", "content/images/blue_button_off.png");
-		this._system.loader.add("greenButton_On", "content/images/green_button_on.png");
-		this._system.loader.add("greenButton_Off", "content/images/green_button_off.png");
+		this._system.loader.add("greyPanel", "content/images/grey_panel.png", { task: ImageAssetTask });
+		this._system.loader.add("blueButton_On", "content/images/blue_button_on.png", { task: ImageAssetTask });
+		this._system.loader.add("blueButton_Off", "content/images/blue_button_off.png", { task: ImageAssetTask });
+		this._system.loader.add("greenButton_On", "content/images/green_button_on.png", { task: ImageAssetTask });
+		this._system.loader.add("greenButton_Off", "content/images/green_button_off.png", { task: ImageAssetTask });
 	}
 
 	init() {

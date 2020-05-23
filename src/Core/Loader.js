@@ -5,6 +5,7 @@ import { Scene } from "@babylonjs/core/scene";
 
 import { AssetsManager } from "@babylonjs/core/Misc";
 import { TextureAssetTask } from "@babylonjs/core/Misc";
+import { ImageAssetTask } from "@babylonjs/core/Misc";
 
 import LoaderEvent from "./LoaderEvent";
 
@@ -27,6 +28,9 @@ class Loader {
 			case TextureAssetTask:
 				this._assets[task.name] = task.texture;
 				break;
+			case ImageAssetTask:
+				this._assets[task.name] = task.image;
+				break;
 			default:
 				console.error("Loader:", `Error loading asset ${task.name}. Unrecognized AssetManager task type.`);
 				break;
@@ -41,7 +45,7 @@ class Loader {
 		this._system.bus.dispatch(new LoaderEvent(LoaderEvent.READY))
 	}
 
-	add(key, path) {
+	add(key, path, options = {}) {
 		if (this._assets.hasOwnProperty(key)) {
 			console.error("Loader:", `${key} is already used by another asset.`);
 			return;
@@ -51,14 +55,28 @@ class Loader {
 
 		let assetTask;
 
-		const fileExt = path.split('.').pop().toLowerCase();
-		switch (fileExt) {
-			case "png":
-				assetTask = this._assetsManager.addTextureTask(key, path);
-				break;
-			default:
-				console.error("Loader:", `Error loading asset ${key}. Unrecognized file extension.`);
-				break;
+		if (options.task) {
+			switch (options.task) {
+				case ImageAssetTask:
+					console.log("LOADS AN IMAGEHTML!");
+					assetTask = this._assetsManager.addImageTask(key, path);
+					break;
+				case TextureAssetTask:
+					assetTask = this._assetsManager.addTextureTask(key, path);
+					break;
+				default:
+					console.error("Loader:", `Error loading asset ${key}. Unrecognized task type.`);
+			}
+		} else {
+			const fileExt = path.split('.').pop().toLowerCase();
+			switch (fileExt) {
+				case "png":
+					assetTask = this._assetsManager.addTextureTask(key, path);
+					break;
+				default:
+					console.error("Loader:", `Error loading asset ${key}. Unrecognized file extension.`);
+					break;
+			}
 		}
 
 		if (assetTask) {

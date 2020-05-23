@@ -57,7 +57,8 @@ class HUDScene extends GameScene {
 		timeCounter.thickness = 0;
 		timeCtrl.addControl(timeCounter);
 
-		const background = new Image("timeCounterBkg", "content/images/grey_panel.png");
+		const background = new Image("timeCounterBkg", "");
+		background.domImage = this._system.loader.getAssetByKey("greyPanel");
 		background.stretch = Image.STRETCH_NINE_PATCH;
 		background.sliceLeft = 5;
 		background.sliceTop = 5;
@@ -96,10 +97,16 @@ class HUDScene extends GameScene {
 		buttonsPanel.height = "60px";
 		timeCtrl.addControl(buttonsPanel);
 
-		const pauseButton = Button.CreateImageWithCenterTextButton("pauseButton",
-			"\uf04c",
-			"content/images/blue_button_off.png");
-	    pauseButton.color = "#1EA7E1";
+		const pauseButton = Button.CreateImageWithCenterTextButton("pauseButton", "\uf04c", "");
+
+		if (this._game.time.isPaused) {
+			pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_On");
+			pauseButton.color = "#FFFFFF";
+		} else {
+			pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_Off");
+			pauseButton.color = "#1EA7E1";
+		}
+
 	    pauseButton.fontFamily = "'Font Awesome 5 Free'";
 	    pauseButton.fontWeight = 900;
 	    pauseButton.fontSize = 24;
@@ -111,10 +118,16 @@ class HUDScene extends GameScene {
 
 	    pauseButton.onPointerClickObservable.add(this._onPause.bind(this));
 
-		const playButton = Button.CreateImageWithCenterTextButton("playButton",
-			"\uf04b",
-			"content/images/green_button_on.png");
-	    playButton.color = "#FFFFFF";
+		const playButton = Button.CreateImageWithCenterTextButton("playButton", "\uf04b", "");
+
+		if (this._game.time.isPaused) {
+			playButton.image.domImage = this._system.loader.getAssetByKey("greenButton_Off");
+			playButton.color = "#85DD5D";
+		} else {
+			playButton.image.domImage = this._system.loader.getAssetByKey("greenButton_On");
+			playButton.color = "#FFFFFF";
+		}
+
 	    playButton.fontFamily = "'Font Awesome 5 Free'";
 	    playButton.fontWeight = 900;
 	    playButton.fontSize = 24;
@@ -144,7 +157,8 @@ class HUDScene extends GameScene {
 		scoreboard.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
 		scoreboard.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
 
-		const background = new Image("scoreboardBkg", "content/images/grey_panel.png");
+		const background = new Image("scoreboardBkg", "");
+		background.domImage = this._system.loader.getAssetByKey("greyPanel");
 		background.stretch = Image.STRETCH_NINE_PATCH;
 		background.sliceLeft = 5;
 		background.sliceTop = 5;
@@ -191,10 +205,10 @@ class HUDScene extends GameScene {
 		if (!this._game.time.isPaused) {
 			this._game.time.isPaused = true;
 
-			this._timeCtrl.playButton.image.source = "content/images/green_button_off.png";
+			this._timeCtrl.playButton.image.domImage = this._system.loader.getAssetByKey("greenButton_Off");
 			this._timeCtrl.playButton.color = "#85DD5D";
 
-			this._timeCtrl.pauseButton.image.source = "content/images/blue_button_on.png";
+			this._timeCtrl.pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_On");
 			this._timeCtrl.pauseButton.color = "#FFFFFF";
 		}
 	}
@@ -203,10 +217,10 @@ class HUDScene extends GameScene {
 		if (this._game.time.isPaused) {
 			this._game.time.isPaused = false;
 
-			this._timeCtrl.playButton.image.source = "content/images/green_button_on.png";
+			this._timeCtrl.playButton.image.domImage = this._system.loader.getAssetByKey("greenButton_On");
 			this._timeCtrl.playButton.color = "#FFFFFF";
 
-			this._timeCtrl.pauseButton.image.source = "content/images/blue_button_off.png";
+			this._timeCtrl.pauseButton.image.domImage = this._system.loader.getAssetByKey("blueButton_Off");
 			this._timeCtrl.pauseButton.color = "#1EA7E1";
 		}
 	}
