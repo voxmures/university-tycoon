@@ -7,6 +7,7 @@ import { AssetsManager } from "@babylonjs/core/Misc";
 import { TextureAssetTask } from "@babylonjs/core/Misc";
 import { ImageAssetTask } from "@babylonjs/core/Misc";
 import { BinaryFileAssetTask } from "@babylonjs/core/Misc";
+import { TextFileAssetTask } from "@babylonjs/core/Misc";
 
 import LoaderEvent from "./LoaderEvent";
 
@@ -34,6 +35,9 @@ class Loader {
 				break;
 			case BinaryFileAssetTask:
 				this._assets[task.name] = task.data;
+				break;
+			case TextFileAssetTask:
+				this._assets[task.name] =  task.text;
 				break;
 			default:
 				console.error("Loader:", `Error loading asset ${task.name}. Unrecognized AssetManager task type.`);
@@ -78,6 +82,9 @@ class Loader {
 					break;
 				case "ogg":
 					assetTask = this._assetsManager.addBinaryFileTask(key, path);
+					break;
+				case "json":
+					assetTask = this._assetsManager.addTextFileTask(key, path);
 					break;
 				default:
 					console.error("Loader:", `Error loading asset ${key}. Unrecognized file extension.`);

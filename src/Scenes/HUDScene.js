@@ -238,16 +238,22 @@ class HUDScene extends GameScene {
 		}
 	}
 
-	_updateDayValue() {
+	_updateTimeValue() {
 		this._timeCtrl.counter.text = `${this._game.time.current}`;
 	}
 
 	_updateCashValue() {
 		this._scoreboard.cash.text = `${this._game.university.cash} €`;
+
+		if (this._game.university.cash < 0) {
+			this._scoreboard.cash.color = "#FF0000";
+		} else {
+			this._scoreboard.cash.color = "#000000";
+		}
 	}
 
 	update() {
-		this._updateDayValue();
+		this._updateTimeValue();
 		this._updateCashValue();
 	}
 }

@@ -1,0 +1,25 @@
+{
+	"cash": 10000,
+	"students": 62,
+	"tuition": 420,
+	"teachers": [
+		{
+			"name": "Glenn Cobble",
+			"salary": 2200,
+			"mood": 80,
+			"rank": 92
+		},
+		{
+			"name": "Crista Bronson",
+			"salary": 1600,
+			"mood": 73,
+			"rank": 95
+		},
+		{
+			"name": "Phillip Gonsales",
+			"salary": 2500,
+			"mood": 85,
+			"rank": 76
+		}
+	]
+}

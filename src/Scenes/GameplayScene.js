@@ -17,12 +17,22 @@ class GameplayScene extends GameScene {
 
 		// Load GUI sounds
 		this._system.loader.add("clickSFX", "content/audio/click.ogg");
+
+		// Load Data
+		this._system.loader.add("initData", "content/data/init.json");
 	}
 
 	init() {
 		// Start subsystems
 		this._system.sceneManager.start("HUD");
 		this._system.sceneManager.start("GUI");
+
+		this.startGame();
+	}
+
+	startGame() {
+		const data = JSON.parse(this._system.loader.getAssetByKey("initData"));
+		this._game.init(data);
 	}
 
 	update() {

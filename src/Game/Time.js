@@ -8,7 +8,7 @@ class Time {
 		this._time = 0;
 		this._accumulatedDeltaTime = 0;
 
-		this._isPaused = true;
+		this._isPaused = false;
 	}
 
 	get current() {

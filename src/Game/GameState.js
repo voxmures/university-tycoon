@@ -8,8 +8,6 @@ class GameState {
 	constructor() {
 		this._time = new Time();
 		this._university = new University();
-
-		this._isPaused = true;
 	}
 
 	get time() {
@@ -20,6 +18,10 @@ class GameState {
 		return this._university;
 	}
 
+	init(data) {
+		this._university.init(data);
+	}
+
 	update(dt) {
 		const previousTime = this._time.current;
 
@@ -28,7 +30,13 @@ class GameState {
 		const hasTimeIncreased = this._time.current > previousTime;
 
 		if (hasTimeIncreased) {
-			// TODO: Apply updates on Management
+			if (this._time.current % 4 === 0) {		// Every month...
+				this._university.paySalaries();
+			}
+
+			if (this._time.current % 24 === 0) {	// Every semester...
+				this._university.earnTuition();
+			}
 		}
 	}
 }
