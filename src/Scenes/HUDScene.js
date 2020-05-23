@@ -12,6 +12,7 @@ import { Rectangle } from "@babylonjs/gui";
 import { Image } from "@babylonjs/gui";
 import { StackPanel } from "@babylonjs/gui";
 import { TextBlock } from "@babylonjs/gui";
+import { Button } from "@babylonjs/gui";
 
 import { Control } from "@babylonjs/gui/2D/controls/";
 
@@ -26,6 +27,7 @@ class HUDScene extends GameScene {
 		this._camera = null;
 		this._rootUI = null;
 
+		this._timeCtrl = {};
 		this._scoreboard = {};
 	}
 
@@ -39,11 +41,101 @@ class HUDScene extends GameScene {
 
 		this._rootUI = AdvancedDynamicTexture.CreateFullscreenUI("rootUI", true, this._scene);
 	
+		this._timeCtrl = this._generateTimeCtrl(this._rootUI);
 		this._scoreboard = this._generateScoreboard(this._rootUI);
 	}
 
+	_generateTimeCtrl(parent) {
+		const timeCtrl = new StackPanel();
+		timeCtrl.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
+
+		// Time counter
+		const timeCounter = new Rectangle("timeCounter");
+		timeCounter.isPointerBlocker = true;
+		timeCounter.width = `${SCOREBOARD_SIZE.width}px`;
+		timeCounter.height = "30px";
+		timeCounter.thickness = 0;
+		timeCtrl.addControl(timeCounter);
+
+		const background = new Image("timeCounterBkg", "content/images/grey_panel.png");
+		background.stretch = Image.STRETCH_NINE_PATCH;
+		background.sliceLeft = 5;
+		background.sliceTop = 5;
+		background.sliceRight = 95;
+		background.sliceBottom = 95;
+		timeCounter.addControl(background);
+
+		const timeField = new StackPanel("timeField");
+		timeField.isVertical = false;
+		timeField.height = "20px";
+		timeField.paddingLeft = "10px";
+		timeCounter.addControl(timeField);
+
+		const timeLabel = new TextBlock("timeLabel");
+		timeLabel.text = "Week";
+		timeLabel.color = "black";
+		timeLabel.fontSize = 12;
+		timeLabel.fontStyle = "bold";
+		timeLabel.width = `${Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
+	    timeLabel.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	    timeLabel.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+		timeField.addControl(timeLabel);
+
+		const timeValue = new TextBlock("timeValue");
+		timeValue.text = "0";
+		timeValue.color = "black";
+		timeValue.fontSize = 12;
+		timeValue.width = `${SCOREBOARD_SIZE.width - Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
+		timeValue.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	    timeValue.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+		timeField.addControl(timeValue);
+
+		// Pause/Play buttons
+		const buttonsPanel = new StackPanel();
+		buttonsPanel.isVertical = false;
+		buttonsPanel.height = "60px";
+		timeCtrl.addControl(buttonsPanel);
+
+		const pauseButton = Button.CreateImageWithCenterTextButton("pauseButton",
+			"\uf04c",
+			"content/images/blue_button_off.png");
+	    pauseButton.color = "#1EA7E1";
+	    pauseButton.fontFamily = "'Font Awesome 5 Free'";
+	    pauseButton.fontWeight = 900;
+	    pauseButton.fontSize = 24;
+	    pauseButton.thickness = 0;
+	    pauseButton.width = "49px";
+	    pauseButton.height = "49px";
+	    pauseButton.paddingRight = "3px";
+		buttonsPanel.addControl(pauseButton);
+
+	    pauseButton.onPointerClickObservable.add(this._onPause.bind(this));
+
+		const playButton = Button.CreateImageWithCenterTextButton("playButton",
+			"\uf04b",
+			"content/images/green_button_on.png");
+	    playButton.color = "#FFFFFF";
+	    playButton.fontFamily = "'Font Awesome 5 Free'";
+	    playButton.fontWeight = 900;
+	    playButton.fontSize = 24;
+	    playButton.thickness = 0;
+	    playButton.width = "49px";
+	    playButton.height = "49px";
+	    playButton.paddingLeft = "3px";
+	    buttonsPanel.addControl(playButton);
+
+	    playButton.onPointerClickObservable.add(this._onPlay.bind(this));
+
+		parent.addControl(timeCtrl);
+
+		return {
+			counter: timeValue,
+			pauseButton: pauseButton,
+			playButton: playButton
+		};
+	}
+
 	_generateScoreboard(parent) {
-		// Scoreboard
 		const scoreboard = new Rectangle("scoreboard");
 		scoreboard.isPointerBlocker = true;
 		scoreboard.width = SCOREBOARD_SIZE.width + "px";
@@ -61,32 +153,7 @@ class HUDScene extends GameScene {
 		scoreboard.addControl(background);
 
 		const panel = new StackPanel("scoreboardPanel");
-		scoreboard.addControl(panel);
-
-		const dayField = new StackPanel("dayField");
-		dayField.isVertical = false;
-		dayField.height = `${Math.floor((SCOREBOARD_SIZE.height - 10) / 2)}px`;
-		dayField.paddingLeft = "10px";
-		panel.addControl(dayField);
-
-		const dayLabel = new TextBlock("dayLabel");
-		dayLabel.text = "Day";
-		dayLabel.color = "black";
-		dayLabel.fontSize = 12;
-		dayLabel.fontStyle = "bold";
-		dayLabel.width = `${Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
-	    dayLabel.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
-	    dayLabel.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
-		dayField.addControl(dayLabel);
-
-		const dayValue = new TextBlock("dayValue");
-		dayValue.text = "0";
-		dayValue.color = "black";
-		dayValue.fontSize = 12;
-		dayValue.width = `${SCOREBOARD_SIZE.width - Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
-		dayValue.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
-	    dayValue.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
-		dayField.addControl(dayValue);
+		scoreboard.addControl(panel);		
 
 		const cashField = new StackPanel("cashField");
 		cashField.isVertical = false;
@@ -116,13 +183,36 @@ class HUDScene extends GameScene {
 		parent.addControl(scoreboard);
 
 		return {
-			day: dayValue,
 			cash: cashValue
 		};
 	}
 
+	_onPause() {
+		if (!this._game.time.isPaused) {
+			this._game.time.isPaused = true;
+
+			this._timeCtrl.playButton.image.source = "content/images/green_button_off.png";
+			this._timeCtrl.playButton.color = "#85DD5D";
+
+			this._timeCtrl.pauseButton.image.source = "content/images/blue_button_on.png";
+			this._timeCtrl.pauseButton.color = "#FFFFFF";
+		}
+	}
+
+	_onPlay() {
+		if (this._game.time.isPaused) {
+			this._game.time.isPaused = false;
+
+			this._timeCtrl.playButton.image.source = "content/images/green_button_on.png";
+			this._timeCtrl.playButton.color = "#FFFFFF";
+
+			this._timeCtrl.pauseButton.image.source = "content/images/blue_button_off.png";
+			this._timeCtrl.pauseButton.color = "#1EA7E1";
+		}
+	}
+
 	_updateDayValue() {
-		this._scoreboard.day.text = `${this._game.time.current}`;
+		this._timeCtrl.counter.text = `${this._game.time.current}`;
 	}
 
 	_updateCashValue() {

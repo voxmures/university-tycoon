@@ -11,8 +11,8 @@ import GameState from "./Game/GameState";
 
 import SplashScreenScene from "./Scenes/SplashScreenScene";
 import GameplayScene from "./Scenes/GameplayScene";
-import HUDScene from "./Scenes/HUDScene";
 import GUIScene from "./Scenes/GUIScene";
+import HUDScene from "./Scenes/HUDScene";
 
 const font = new FontFaceObserver("Font Awesome 5 Free", { weight: 900, style: 'normal' });
 

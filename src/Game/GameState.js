@@ -8,6 +8,8 @@ class GameState {
 	constructor() {
 		this._time = new Time();
 		this._university = new University();
+
+		this._isPaused = true;
 	}
 
 	get time() {
@@ -23,9 +25,9 @@ class GameState {
 
 		this._time.update(dt);
 
-		const hasDayPassed = this._time.current > previousTime;
+		const hasTimeIncreased = this._time.current > previousTime;
 
-		if (hasDayPassed) {
+		if (hasTimeIncreased) {
 			// TODO: Apply updates on Management
 		}
 	}
