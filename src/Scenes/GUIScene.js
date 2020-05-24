@@ -66,6 +66,10 @@ class GUIScene extends GameScene {
 		this._windows.push(testWindow2);
 	}
 
+	loadAsset(key) {
+		return this._system.loader.getAssetByKey(key);
+	}
+
 	_sortWindows(target) {
 		const index = this._windows.indexOf(target);
 		if (index >= 0) {

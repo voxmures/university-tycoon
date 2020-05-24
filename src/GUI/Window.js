@@ -5,6 +5,7 @@ import { Rectangle } from "@babylonjs/gui";
 import { StackPanel } from "@babylonjs/gui";
 import { TextBlock } from "@babylonjs/gui";
 import { Button } from "@babylonjs/gui";
+import { Image } from "@babylonjs/gui";
 
 import { Control } from "@babylonjs/gui/2D/controls/";
 
@@ -18,7 +19,13 @@ class Window extends Rectangle {
 		super(name);
 		this._parent = parent;	// Parent GameScene
 
+		this._content = null;
+
 		this._init(options || {});
+	}
+
+	get content() {
+		return this._content;
 	}
 
 	_init(options) {
@@ -27,10 +34,16 @@ class Window extends Rectangle {
 
 		this.width = (options.width || DEFAULT_WIDTH) + "px";
 		this.height = (options.height || DEFAULT_HEIGHT) + "px";
-		this.background = "#DCDCDC";
-		this.cornerRadius = 2;
-		this.color = "#000000";
-		this.thickness = 1;
+		this.thickness = 0;
+
+		const background = new Image("windowBkg", "");
+		background.domImage = this._parent.loadAsset("windowPanel");
+		background.stretch = Image.STRETCH_NINE_PATCH;
+		background.sliceLeft = 12;
+		background.sliceTop = 32;
+		background.sliceRight = 88;
+		background.sliceBottom = 88;
+		this.addControl(background);
 
 		const panel = new StackPanel();
 		panel.width = (options.width || DEFAULT_WIDTH) + "px";
@@ -46,11 +59,13 @@ class Window extends Rectangle {
 		}
 
 		panel.addControl(header);
-		panel.addControl(this._generateBody(options));
+
+		this._content = this._generateBody(options);
+		panel.addControl(this._content);
 	}
 
 	_generateHeader(options) {
-		const headerHeight = (options.height || DEFAULT_HEIGHT) / 6;
+		const headerHeight = 30;
 
 		const header = new StackPanel();
 		header.isVertical = false;
@@ -68,17 +83,17 @@ class Window extends Rectangle {
 	    title.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
 	    title.width = textWidth + "px";
 	    title.height = headerHeight + "px";
-	    title.paddingLeft = ((options.width || DEFAULT_WIDTH) * 0.02) + "px";
+	    title.paddingLeft = ((options.width || DEFAULT_WIDTH) * 0.05) + "px";
 	    title.paddingTop = (headerHeight * 0.35) + "px";
 
-	    const buttonWidth = (options.width || DEFAULT_WIDTH) - textWidth;
-
-	    const closeButton = new Button.CreateSimpleButton("closeButton", "\uf00d");
-	    closeButton.color = "#000000";
+	    const closeButton = Button.CreateImageWithCenterTextButton("closeButton", "\uf00d", "");
+	    closeButton.image.domImage = this._parent.loadAsset("greyCircle");
+	    closeButton.color = "#E86A16"
 	    closeButton.fontFamily = "'Font Awesome 5 Free'";
 	    closeButton.fontWeight = 900;
-	    closeButton.width = buttonWidth + "px"; // paddingLeft is subtracted
-	    closeButton.height = headerHeight + "px";
+	    closeButton.fontSize = 16;
+	    closeButton.width = "20px"; // paddingLeft is subtracted
+	    closeButton.height = "20px";
 	    closeButton.thickness = 0;
 
 	    closeButton.onPointerClickObservable.add(this._onClose.bind(this));
@@ -97,10 +112,7 @@ class Window extends Rectangle {
 		body.width = width + "px";
 		body.height = height + "px";
 		body.left = "1px";
-		body.background = "#D3D3D3";
-		body.cornerRadius = 2;
-		body.color = "#000000";
-		body.thickness = 1;
+		body.thickness = 0;
 
 		return body;
 	}

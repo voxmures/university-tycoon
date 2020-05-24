@@ -14,6 +14,8 @@ class GameplayScene extends GameScene {
 		this._system.loader.add("blueButton_Off", "content/images/blue_button_off.png", { task: ImageAssetTask });
 		this._system.loader.add("greenButton_On", "content/images/green_button_on.png", { task: ImageAssetTask });
 		this._system.loader.add("greenButton_Off", "content/images/green_button_off.png", { task: ImageAssetTask });
+		this._system.loader.add("windowPanel", "content/images/window_green.png", { task: ImageAssetTask });
+		this._system.loader.add("greyCircle", "content/images/grey_circle.png", { task: ImageAssetTask });
 
 		// Load GUI sounds
 		this._system.loader.add("clickSFX", "content/audio/click.ogg");
