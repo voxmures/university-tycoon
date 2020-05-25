@@ -1,8 +1,8 @@
 // WindowEvent.js
 
-import Event from "../Core/Event";
+import GameEvent from "../Core/GameEvent";
 
-class WindowEvent extends Event {
+class WindowEvent extends GameEvent {
 	
 	constructor(id, target = null) {
 		super(id);

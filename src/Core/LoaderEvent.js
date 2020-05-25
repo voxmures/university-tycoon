@@ -1,8 +1,8 @@
 // LoaderEvent.js
 
-import Event from "./Event";
+import GameEvent from "./GameEvent";
 
-class LoaderEvent extends Event {
+class LoaderEvent extends GameEvent {
 
 	constructor(id) {
 		super(id);

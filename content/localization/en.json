@@ -1,0 +1,14 @@
+{
+	"language": "EN",
+	"lastUpdate": "2020-05-24",
+	"data": [
+		{
+			"id": "TEXT_WELCOME",
+			"text": "Welcome to you first day as dean at University Tycoon! Your duty consist on keeping up the university income while incrementing the satisfaction of the students, so the business is satisfactory to the stakeholders. No matter what you need to do in order to success on this!"
+		},
+		{
+			"id": "TEXT_OUT_OF_CASH",
+			"text": "The university have ran out of cash! The stakeholders will not let this situation going on. Try your best to end the year with positive results!"
+		}
+	]
+}

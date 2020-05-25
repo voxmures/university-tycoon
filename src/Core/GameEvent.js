@@ -1,6 +1,6 @@
-// Event.js
+// GameEvent.js
 
-class Event {
+class GameEvent {
 	
 	constructor(id) {
 		this._id = id;
@@ -11,4 +11,4 @@ class Event {
 	}
 }
 
-export default Event;
+export default GameEvent;

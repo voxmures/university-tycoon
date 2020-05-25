@@ -1,0 +1,22 @@
+{
+	"landmarks": [
+		{
+			"id": "LANDMARK_START_GAME",
+			"conditions": ["CONDITION_GAME_START"],
+			"actions": [
+				["ACTION_SHOW_MESSAGE", "TEXT_WELCOME"],
+				"ACTION_UNSUBSCRIBE_EVENT"
+			]
+		},
+		{
+			"id": "LANDMARK_OUT_OF_CASH",
+			"conditions": [
+				["CONDITION_VARIABLE_LESS_THAN", "VARIABLE_CASH", 0]
+			],
+			"actions": [
+				["ACTION_SHOW_MESSAGE", "TEXT_OUT_OF_CASH"],
+				"ACTION_UNSUBSCRIBE_EVENT"
+			]
+		}
+	]
+}
