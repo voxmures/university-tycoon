@@ -9,6 +9,8 @@ import ParamsParser from "../Game/ParamsParser";
 import ConditionFactory from "../Game/ConditionFactory";
 import ActionFactory from "../Game/ActionFactory";
 
+import GUIEvent from "../Events/GUIEvent";
+
 import { ImageAssetTask } from "@babylonjs/core/Misc";
 
 class GameplayScene extends GameScene {
@@ -84,7 +86,7 @@ class GameplayScene extends GameScene {
 	}
 
 	showMessage(id) {
-		console.log(this._localization[id]);
+		this._system.bus.dispatch(new GUIEvent(GUIEvent.SHOW_POPUP_MESSAGE, this._localization[id]));
 	}
 
 	update() {

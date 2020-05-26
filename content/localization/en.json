@@ -4,7 +4,7 @@
 	"data": [
 		{
 			"id": "TEXT_WELCOME",
-			"text": "Welcome to you first day as dean at University Tycoon! Your duty consist on keeping up the university income while incrementing the satisfaction of the students, so the business is satisfactory to the stakeholders. No matter what you need to do in order to success on this!"
+			"text": "Welcome! This is your first day as dean at University Tycoon! Your duty consist on keeping up the university income while increasing the satisfaction of the students, so the business is satisfactory to the stakeholders. No matter what you need to do in order to success on this!"
 		},
 		{
 			"id": "TEXT_OUT_OF_CASH",

@@ -3,7 +3,7 @@
 import Action from "../LandmarkSystem/Action";
 
 const MethodsCollection = {
-	"ACTION_UNSUBSCRIBE_EVENT": function (landmark) { landmark.selfUnsubscribe(); },
+	"ACTION_UNSUBSCRIBE_LANDMARK": function (landmark) { landmark.selfUnsubscribe(); },
 	"ACTION_SHOW_MESSAGE": function (landmark, [a]) { this.scene.showMessage(a); }
 };
 

@@ -5,7 +5,7 @@
 			"conditions": ["CONDITION_GAME_START"],
 			"actions": [
 				["ACTION_SHOW_MESSAGE", "TEXT_WELCOME"],
-				"ACTION_UNSUBSCRIBE_EVENT"
+				"ACTION_UNSUBSCRIBE_LANDMARK"
 			]
 		},
 		{
@@ -15,7 +15,7 @@
 			],
 			"actions": [
 				["ACTION_SHOW_MESSAGE", "TEXT_OUT_OF_CASH"],
-				"ACTION_UNSUBSCRIBE_EVENT"
+				"ACTION_UNSUBSCRIBE_LANDMARK"
 			]
 		}
 	]

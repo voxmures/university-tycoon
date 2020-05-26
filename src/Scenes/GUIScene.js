@@ -2,8 +2,11 @@
 // Actual user interface to interact with the game
 
 import GameScene from "../Core/GameScene";
+
 import Window from "../GUI/Window";
 import WindowEvent from "../GUI/WindowEvent";
+
+import GUIEvent from "../Events/GUIEvent";
 
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Matrix } from "@babylonjs/core/Maths/math";
@@ -12,6 +15,8 @@ import { TargetCamera } from "@babylonjs/core/Cameras";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 
 import { AdvancedDynamicTexture } from "@babylonjs/gui";
+import { TextBlock } from "@babylonjs/gui";
+import { Control } from "@babylonjs/gui/2D/controls/";
 
 // Required side effects to populate the Create methods on the mesh class. Without this, the bundle would be smaller but the createXXX methods from mesh would not be accessible.
 import "@babylonjs/core/Meshes/meshBuilder";
@@ -30,6 +35,8 @@ class GUIScene extends GameScene {
 		this._system.bus.listenTo(WindowEvent.WINDOW_CLOSE, this._onWindowClose, this);
 		this._system.bus.listenTo(WindowEvent.START_MOUSE_MOVE, this._onStartMouseMove, this);
 
+		this._system.bus.listenTo(GUIEvent.SHOW_POPUP_MESSAGE, this._onShowPopupMessage, this);
+
 		this._onMouseMoveCallback = this._onMouseMove.bind(this);
 		this._onEndMouseMoveCallback = this._onEndMouseMove.bind(this);
 	}
@@ -43,31 +50,37 @@ class GUIScene extends GameScene {
 		this._camera.setTarget(Vector3.Zero());
 
 		this._rootUI = AdvancedDynamicTexture.CreateFullscreenUI("rootUI", true, this._scene);
-
-		const testWindow = new Window("Test", {
-			width: this._system.engine.getRenderWidth() / 4,
-			height: this._system.engine.getRenderHeight() / 4,
-			title: "Window 1",
-			isMoveable: true
-		}, this);
-		testWindow.zIndex = 1;
-		this._rootUI.addControl(testWindow);
-
-		this._windows.push(testWindow);
-
-		const testWindow2 = new Window("Test2", {
-			width: this._system.engine.getRenderWidth() / 4,
-			height: this._system.engine.getRenderHeight() / 4,
-			title: "Window 2"
-		}, this);
-		testWindow2.zIndex = 0;
-		this._rootUI.addControl(testWindow2);
-
-		this._windows.push(testWindow2);
 	}
 
 	loadAsset(key) {
 		return this._system.loader.getAssetByKey(key);
+	}
+
+	_onShowPopupMessage(e) {
+
+		const width = this._system.engine.getRenderWidth() / 2;
+		const height = this._system.engine.getRenderHeight() / 3;
+
+		const popup = new Window("Popup", {
+			width: width,
+			height: height,
+			title: "Message",
+			isMoveable: true
+		}, this);
+
+		const text = e.data;
+
+		const message = new TextBlock();
+		message.text = text;
+		message.textWrapping = true;
+		message.fontSize = 12;
+		message.width = Math.floor(width * .8) + "px";
+		
+		popup.body.addControl(message);		
+
+		this._openWindow(popup);
+
+		this._rootUI.addControl(popup);
 	}
 
 	_sortWindows(target) {
@@ -81,6 +94,11 @@ class GUIScene extends GameScene {
 				this._windows[i].zIndex -= 1;
 			}
 		}
+	}
+
+	_openWindow(target) {
+		target.zIndex = this._windows.length;
+		this._windows.unshift(target);
 	}
 
 	_closeWindow(target) {

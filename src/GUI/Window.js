@@ -19,13 +19,13 @@ class Window extends Rectangle {
 		super(name);
 		this._parent = parent;	// Parent GameScene
 
-		this._content = null;
+		this._body = null;
 
 		this._init(options || {});
 	}
 
-	get content() {
-		return this._content;
+	get body() {
+		return this._body;
 	}
 
 	_init(options) {
@@ -60,8 +60,8 @@ class Window extends Rectangle {
 
 		panel.addControl(header);
 
-		this._content = this._generateBody(options);
-		panel.addControl(this._content);
+		this._body = this._generateBody(options);
+		panel.addControl(this._body);
 	}
 
 	_generateHeader(options) {
@@ -95,6 +95,7 @@ class Window extends Rectangle {
 	    closeButton.width = "20px"; // paddingLeft is subtracted
 	    closeButton.height = "20px";
 	    closeButton.thickness = 0;
+	    closeButton.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
 
 	    closeButton.onPointerClickObservable.add(this._onClose.bind(this));
 
