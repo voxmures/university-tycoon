@@ -72,7 +72,7 @@ class Window extends Rectangle {
 		header.width = (options.width || DEFAULT_WIDTH) + "px";
 		header.height = headerHeight + "px";
 
-		const textWidth = (options.width || DEFAULT_WIDTH) * 0.9;
+		const textWidth = (options.width || DEFAULT_WIDTH) * 0.95;
 
 	    const title = new TextBlock();
 	    title.text = options.title || "Window Title";
@@ -94,8 +94,8 @@ class Window extends Rectangle {
 	    closeButton.fontSize = 16;
 	    closeButton.width = "20px"; // paddingLeft is subtracted
 	    closeButton.height = "20px";
-	    closeButton.thickness = 0;
 	    closeButton.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
+	    closeButton.thickness = 0;
 
 	    closeButton.onPointerClickObservable.add(this._onClose.bind(this));
 
