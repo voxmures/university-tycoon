@@ -32,6 +32,10 @@ class EventBus {
 			}
 		}
 	}
+
+	reset() {
+		this._listeners = {};
+	}
 }
 
 export default EventBus;

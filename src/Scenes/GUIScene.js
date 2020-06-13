@@ -27,6 +27,8 @@ class GUIScene extends GameScene {
 		this._camera = null;
 		this._rootUI = null;
 
+		this._isMouseEnabled = true;
+
 		this._windows = [];
 
 		this._focus = null;
@@ -36,6 +38,8 @@ class GUIScene extends GameScene {
 		this._system.bus.listenTo(WindowEvent.START_MOUSE_MOVE, this._onStartMouseMove, this);
 
 		this._system.bus.listenTo(GUIEvent.SHOW_POPUP_MESSAGE, this._onShowPopupMessage, this);
+
+		this._system.bus.listenTo(GUIEvent.TOGGLE_MOUSE, this._onToggleMouse, this);
 
 		this._onMouseMoveCallback = this._onMouseMove.bind(this);
 		this._onEndMouseMoveCallback = this._onEndMouseMove.bind(this);
@@ -83,6 +87,10 @@ class GUIScene extends GameScene {
 		this._rootUI.addControl(popup);
 	}
 
+	_onToggleMouse() {
+		this._isMouseEnabled = !this._isMouseEnabled;
+	}
+
 	_sortWindows(target) {
 		const index = this._windows.indexOf(target);
 		if (index >= 0) {
@@ -111,30 +119,36 @@ class GUIScene extends GameScene {
 	}
 
 	_onWindowFocus(e) {
-		this._sortWindows(e.target);
+		if (this._isMouseEnabled) {
+			this._sortWindows(e.target);
+		}
 	}
 
 	_onWindowClose(e) {
-		this._closeWindow(e.target);
+		if (this._isMouseEnabled) {
+			this._closeWindow(e.target);
+		}
 	}
 
 	_onStartMouseMove(e) {
-		this._focus = e.target;
+		if (this._isMouseEnabled) {
+			this._focus = e.target;
 
-		const trackingSphere = Mesh.CreateSphere("trackingSphere1", 1, .1, this._scene);
-		trackingSphere.scaling = new Vector3(.1, .1, .1);
-		trackingSphere.isVisible = false;
+			const trackingSphere = Mesh.CreateSphere("trackingSphere1", 1, .1, this._scene);
+			trackingSphere.scaling = new Vector3(.1, .1, .1);
+			trackingSphere.isVisible = false;
 
-		trackingSphere.position = this._getMousePositionInWorldCoord();
+			trackingSphere.position = this._getMousePositionInWorldCoord();
 
-		this._focus.linkWithMesh(trackingSphere);
+			this._focus.linkWithMesh(trackingSphere);
 
-		this._focus.linkOffsetXInPixels = this._focus.centerX - this._scene.pointerX;
-		this._focus.linkOffsetYInPixels = this._focus.centerY - this._scene.pointerY;
+			this._focus.linkOffsetXInPixels = this._focus.centerX - this._scene.pointerX;
+			this._focus.linkOffsetYInPixels = this._focus.centerY - this._scene.pointerY;
 
-		const canvas = this.system.engine.getRenderingCanvas();
-		canvas.addEventListener("pointermove", this._onMouseMoveCallback, false);
-		canvas.addEventListener("pointerup", this._onEndMouseMoveCallback, false);
+			const canvas = this.system.engine.getRenderingCanvas();
+			canvas.addEventListener("pointermove", this._onMouseMoveCallback, false);
+			canvas.addEventListener("pointerup", this._onEndMouseMoveCallback, false);
+		}
 	}
 
 	_onEndMouseMove(e) {

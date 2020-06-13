@@ -14,6 +14,9 @@ class System {
 		this._bus = new EventBus(this);
 		this._sceneManager = new SceneManager(this);
 		this._loader = new Loader(this);
+
+		this._onStart = null;
+		this._onReset = null;
 	}
 
 	get engine() {
@@ -34,6 +37,41 @@ class System {
 
 	get loader() {
 		return this._loader;
+	}
+
+	set onStart(handler) {
+		this._onStart = handler;
+	}
+
+	set onReset(handler) {
+		this._onReset = handler;
+	}
+
+	start() {
+		if (this._onStart) {
+			this._onStart();
+		}
+
+		// Render every frame
+		this.engine.runRenderLoop(() => {
+			this.time.update();	// Update time
+
+			this.sceneManager.update();
+			this.sceneManager.render();
+		});
+	}
+
+	reset() {
+		this.engine.stopRenderLoop();
+
+		this.time.reset();
+		this.bus.reset();
+		this.sceneManager.reset();
+		this.loader.reset();
+
+		if (this._onReset) {
+			this._onReset();
+		}
 	}
 }
 

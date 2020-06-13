@@ -68,8 +68,19 @@ class SceneManager {
 		}
 
 		this._scenes[key].state === SceneState.STOPPED;
+		this._scenes[key].dispose();
+	}
 
-		// TODO: Stopped scenes clean up?
+	reset() {
+		for (let key of Object.keys(this._scenes)) {
+			this.stop(key);
+		}
+
+		this._scenes = {};
+		this._queued = [];
+		this._isBooted = false;
+
+		this._system.bus.listenTo(LoaderEvent.READY, this._onReady, this);
 	}
 
 	// Update the active scenes

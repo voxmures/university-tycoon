@@ -28,30 +28,30 @@ font.load().then(() => {
 	// Create game system
 	const system = new System(engine);
 
-	const game = new GameState();
+	system.onStart = () => {
 
-	const splashScreen = new SplashScreenScene(system, game);
-	const gameplay = new GameplayScene(system, game);
-	const hud = new HUDScene(system, game);
-	const gui = new GUIScene(system, game);
+		const game = new GameState();
 
-	const sceneManager = system.sceneManager;
+		const splashScreen = new SplashScreenScene(system, game);
+		const gameplay = new GameplayScene(system, game);
+		const hud = new HUDScene(system, game);
+		const gui = new GUIScene(system, game);
 
-	sceneManager.add("SplashScreen", splashScreen);
-	sceneManager.add("Gameplay", gameplay);
-	sceneManager.add("GUI", gui);
-	sceneManager.add("HUD", hud);
+		const sceneManager = system.sceneManager;
 
-	// Render every frame
-	engine.runRenderLoop(() => {
-		system.time.update();	// Update time
+		sceneManager.add("SplashScreen", splashScreen);
+		sceneManager.add("Gameplay", gameplay);
+		sceneManager.add("GUI", gui);
+		sceneManager.add("HUD", hud);
+	};
 
-		sceneManager.update();
-		sceneManager.render();
-	});
+	system.onReset = () => {
+		system.start();
+	};
+
+	system.start();
 
 	window.addEventListener("resize", () => {
 		engine.resize();
 	});
-
 });

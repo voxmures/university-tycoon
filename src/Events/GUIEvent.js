@@ -15,5 +15,6 @@ class GUIEvent extends GameEvent {
 }
 
 GUIEvent.SHOW_POPUP_MESSAGE = "GUIEvent.SHOW_POPUP_MESSAGE";
+GUIEvent.TOGGLE_MOUSE = "GUIEvent.TOGGLE_MOUSE";
 
 export default GUIEvent;

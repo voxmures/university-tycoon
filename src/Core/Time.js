@@ -21,6 +21,11 @@ class Time {
 		this._previousTime = this._currentTime;
 		this._currentTime = (new Date).getTime();
 	}
+
+	reset() {
+		this._previousTime = (new Date).getTime();
+		this._currentTime = (new Date).getTime();
+	}
 }
 
 export default Time;

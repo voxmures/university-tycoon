@@ -3,6 +3,8 @@
 
 import GameScene from "../Core/GameScene";
 
+import GameplayEvent from "../Events/GameplayEvent";
+
 import LandmarkSystem from "../LandmarkSystem/LandmarkSystem";
 
 import ParamsParser from "../Game/ParamsParser";
@@ -18,6 +20,7 @@ class GameplayScene extends GameScene {
 	preload() {
 		// Load GUI images
 		this._system.loader.add("greyPanel", "content/images/grey_panel.png", { task: ImageAssetTask });
+		this._system.loader.add("greyButton", "content/images/grey_button.png", { task: ImageAssetTask });
 		this._system.loader.add("blueButton_On", "content/images/blue_button_on.png", { task: ImageAssetTask });
 		this._system.loader.add("blueButton_Off", "content/images/blue_button_off.png", { task: ImageAssetTask });
 		this._system.loader.add("greenButton_On", "content/images/green_button_on.png", { task: ImageAssetTask });
@@ -41,6 +44,12 @@ class GameplayScene extends GameScene {
 
 		this._landmarkSystem = null;
 		this._localization = {};
+
+		this._system.bus.listenTo(GameplayEvent.TOGGLE_GAME_STATE, this._onToggleGameState, this);
+	}
+
+	_onToggleGameState() {
+		this._isRunning = !this._isRunning;
 	}
 
 	init() {
@@ -52,13 +61,6 @@ class GameplayScene extends GameScene {
 		this._initLocalization();
 
 		this.startGame();
-	}
-
-	startGame() {
-		let data = JSON.parse(this._system.loader.getAssetByKey("initData"));
-		this._game.init(data);
-
-		this._isRunning = true;
 	}
 
 	_initLandmarkSystem() {
@@ -83,6 +85,13 @@ class GameplayScene extends GameScene {
 		for (let i = 0; i < data.length; i++) {
 			this._localization[data[i].id] = data[i].text;
 		}
+	}
+
+	startGame() {
+		let data = JSON.parse(this._system.loader.getAssetByKey("initData"));
+		this._game.init(data);
+
+		this._isRunning = true;
 	}
 
 	showMessage(id) {

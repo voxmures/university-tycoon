@@ -2,6 +2,9 @@
 
 import GameScene from "../Core/GameScene";
 
+import GameplayEvent from "../Events/GameplayEvent";
+import GUIEvent from "../Events/GUIEvent";
+
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Color3 } from "@babylonjs/core";
 
@@ -17,6 +20,7 @@ import { Button } from "@babylonjs/gui";
 import { Control } from "@babylonjs/gui/2D/controls/";
 
 import { Sound } from "@babylonjs/core";
+import { Engine } from "@babylonjs/core/Engines/engine";
 
 const SCOREBOARD_SIZE = { 
 	width: 150,
@@ -31,6 +35,7 @@ class HUDScene extends GameScene {
 
 		this._timeCtrl = {};
 		this._scoreboard = {};
+		this._systemMenu = {};
 
 		this._clickSFX = null;
 	}
@@ -47,6 +52,7 @@ class HUDScene extends GameScene {
 	
 		this._timeCtrl = this._generateTimeCtrl(this._rootUI);
 		this._scoreboard = this._generateScoreboard(this._rootUI);
+		this._systemMenu = this._generateSystemMenu(this._rootUI);
 
 		this._clickSFX = new Sound("clickSFX", this._system.loader.getAssetByKey("clickSFX"), this._scene, null, {
 			autoplay: false,
@@ -208,6 +214,102 @@ class HUDScene extends GameScene {
 		return {
 			cash: cashValue
 		};
+	}
+
+	_generateSystemMenu(parent) {
+
+		const systemMenuButton = Button.CreateImageWithCenterTextButton("systemMenuButton", "\uf0c9", "");
+		systemMenuButton.image.domImage = this._system.loader.getAssetByKey("greyButton");
+	    systemMenuButton.fontFamily = "'Font Awesome 5 Free'";
+	    systemMenuButton.fontWeight = 900;
+	    systemMenuButton.fontSize = 24;
+	    systemMenuButton.thickness = 0;
+	    systemMenuButton.width = "49px";
+	    systemMenuButton.height = "49px";
+	    systemMenuButton.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	    systemMenuButton.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
+	    systemMenuButton.top = "10px";
+	    systemMenuButton.left = "10px";
+		parent.addControl(systemMenuButton);
+
+	    systemMenuButton.onPointerClickObservable.add(this._onOpenSystemMenu.bind(this));
+
+		const systemMenuContainer = new Rectangle("systemMenuContainer");
+		systemMenuContainer.width = 1;
+		systemMenuContainer.height = 1;
+		systemMenuContainer.background = "#000000";
+		systemMenuContainer.alpha = .8;
+		systemMenuContainer.zIndex = Infinity;	// Show at the top of everything
+		systemMenuContainer.isPointerBlocker = true;
+		systemMenuContainer.isVisible = false;
+		systemMenuContainer.thickness = 0;
+		parent.addControl(systemMenuContainer);
+
+		const optionsContainer = new StackPanel("systemMenuOptionsContainer");
+		systemMenuContainer.addControl(optionsContainer);
+
+		const buttonsCfg = [
+			{ name: "systemMenuContinueButton", text: "\uf11b    Continue", onClick: (btn) => this._onCloseSystemMenu(btn) },
+			{ name: "systemMenuToggleSoundButton", text: "\uf028    Sound ON", onClick: (btn) => this._onToggleSound(btn) },
+			{ name: "systemMenuQuitButton", text: "\uf2f5    Quit", onClick: (btn) => this._onQuitGame(btn) },
+		];
+
+		for (let config of buttonsCfg) {
+
+			const button = new Button.CreateImageWithCenterTextButton(config.name, config.text, "");
+			button.fontFamily = "'Font Awesome 5 Free'";
+		    button.fontWeight = 900;
+		    button.fontSize = 24;
+
+			button.image.domImage = this._system.loader.getAssetByKey("greyButton");
+			button.image.stretch = Image.STRETCH_NINE_PATCH;
+			button.image.sliceLeft = 10;
+			button.image.sliceTop = 10;
+			button.image.sliceRight = 40;
+			button.image.sliceBottom = 40;
+
+			button.width = "200px";
+			button.height = "49px";
+			button.paddingTop = "5px";
+			button.paddingBottom = "5px";
+			button.thickness = 0;
+
+			optionsContainer.addControl(button);
+
+		    button.onPointerClickObservable.add(config.onClick.bind(this, button));
+		}
+
+		return {
+			menu: systemMenuContainer
+		};
+	}
+
+	_onOpenSystemMenu() {
+		this._systemMenu.menu.isVisible = true;
+
+		this._system.bus.dispatch(new GameplayEvent(GameplayEvent.TOGGLE_GAME_STATE));
+		this._system.bus.dispatch(new GUIEvent(GUIEvent.TOGGLE_MOUSE));
+	}
+
+	_onCloseSystemMenu() {
+		this._systemMenu.menu.isVisible = false;
+
+		this._system.bus.dispatch(new GameplayEvent(GameplayEvent.TOGGLE_GAME_STATE));
+		this._system.bus.dispatch(new GUIEvent(GUIEvent.TOGGLE_MOUSE));
+	}
+
+	_onToggleSound(btn) {
+		Engine.audioEngine.setGlobalVolume(1 - Engine.audioEngine.getGlobalVolume());
+
+		if (Engine.audioEngine.getGlobalVolume() > 0) {
+			btn.textBlock.text = "\uf028    Sound ON";
+		} else {
+			btn.textBlock.text = "\uf026    Sound OFF";
+		}
+	}
+
+	_onQuitGame() {
+		this._system.reset();
 	}
 
 	_onPause() {

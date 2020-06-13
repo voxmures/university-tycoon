@@ -46,7 +46,7 @@ class Loader {
 	}
 
 	_onProgress(remaining, total) {
-		console.log("Loader:", `Loaded ${remaining} of ${total} assets.`);
+		// console.log("Loader:", `Loaded ${remaining} of ${total} assets.`);
 	}
 
 	_onFinish() {
@@ -111,6 +111,14 @@ class Loader {
 		}
 
 		return this._assets[key];
+	}
+
+	reset() {
+		this._assetsManager.reset();
+		this._assets = {};
+
+		// Listeners
+		this._system.bus.listenTo(LoaderEvent.LOAD, this.load, this);
 	}
 }
 
