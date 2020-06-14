@@ -87,15 +87,15 @@ class HUDScene extends GameScene {
 		timeField.paddingLeft = "10px";
 		timeCounter.addControl(timeField);
 
-		const timeLabel = new TextBlock("timeLabel");
-		timeLabel.text = "Week";
-		timeLabel.color = "black";
-		timeLabel.fontSize = 12;
-		timeLabel.fontStyle = "bold";
-		timeLabel.width = `${Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
-	    timeLabel.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
-	    timeLabel.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
-		timeField.addControl(timeLabel);
+		// const timeLabel = new TextBlock("timeLabel");
+		// timeLabel.text = "Year";
+		// timeLabel.color = "black";
+		// timeLabel.fontSize = 12;
+		// timeLabel.fontStyle = "bold";
+		// timeLabel.width = `${Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
+	 //    timeLabel.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	 //    timeLabel.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+		// timeField.addControl(timeLabel);
 
 		const timeValue = new TextBlock("timeValue");
 		timeValue.text = "0";
@@ -169,8 +169,8 @@ class HUDScene extends GameScene {
 		scoreboard.width = SCOREBOARD_SIZE.width + "px";
 		scoreboard.height = SCOREBOARD_SIZE.height + "px";
 		scoreboard.thickness = 0;
-		scoreboard.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
-		scoreboard.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+		scoreboard.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		scoreboard.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
 
 		const background = new Image("scoreboardBkg", "");
 		background.domImage = this._system.loader.getAssetByKey("greyPanel");
@@ -209,10 +209,36 @@ class HUDScene extends GameScene {
 		cashValue.width = `${SCOREBOARD_SIZE.width - Math.floor(SCOREBOARD_SIZE.width / 3)}px`;
 		cashField.addControl(cashValue);
 
+		const studentsField = new StackPanel("studentsField");
+		studentsField.isVertical = false;
+		studentsField.height = `${Math.floor((SCOREBOARD_SIZE.height - 10)  / 2)}px`;
+		studentsField.paddingLeft = "10px";
+		panel.addControl(studentsField);
+
+		const studentsLabel = new TextBlock("studentsLabel");
+		studentsLabel.text = "Students";
+		studentsLabel.color = "black";
+		studentsLabel.fontSize = 12;
+		studentsLabel.fontStyle = "bold";
+		studentsLabel.width = `${Math.floor(SCOREBOARD_SIZE.width / 2)}px`;
+		studentsLabel.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	    studentsLabel.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+		studentsField.addControl(studentsLabel);
+
+		const studentsValue = new TextBlock("studentsValue");
+		studentsValue.text = "0";
+		studentsValue.color = "black";
+		studentsValue.fontSize = 12;
+	    studentsValue.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+	    studentsValue.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+		studentsValue.width = `${SCOREBOARD_SIZE.width - Math.floor(SCOREBOARD_SIZE.width / 2)}px`;
+		studentsField.addControl(studentsValue);
+
 		parent.addControl(scoreboard);
 
 		return {
-			cash: cashValue
+			cash: cashValue,
+			students: studentsValue
 		};
 	}
 
@@ -341,7 +367,7 @@ class HUDScene extends GameScene {
 	}
 
 	_updateTimeValue() {
-		this._timeCtrl.counter.text = `${this._game.time.current}`;
+		this._timeCtrl.counter.text = this._game.time.year + "    " + this._game.time.month;
 	}
 
 	_updateCashValue() {
@@ -354,9 +380,14 @@ class HUDScene extends GameScene {
 		}
 	}
 
+	_updateStudentsValue() {
+		this._scoreboard.students.text = this._game.university.students.toString();
+	}
+
 	update() {
 		this._updateTimeValue();
 		this._updateCashValue();
+		this._updateStudentsValue();
 	}
 }
 

@@ -1,6 +1,7 @@
 // Time.js
 
-const TIME_THRESHOLD = 1000;
+const TIME_THRESHOLD = 10000;
+const START_YEAR = 2009;
 
 class Time {
 	
@@ -13,6 +14,15 @@ class Time {
 
 	get current() {
 		return this._time;
+	}
+
+	get year() {
+		return (START_YEAR + Math.floor(this.current / 12)).toString();
+	}
+
+	get month() {
+		const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		return months[Math.floor(this.current % 12)];
 	}
 
 	get isPaused() {

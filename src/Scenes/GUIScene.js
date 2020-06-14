@@ -17,6 +17,9 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { AdvancedDynamicTexture } from "@babylonjs/gui";
 import { TextBlock } from "@babylonjs/gui";
 import { Control } from "@babylonjs/gui/2D/controls/";
+import { Button } from "@babylonjs/gui";
+import { StackPanel } from "@babylonjs/gui";
+import { Image } from "@babylonjs/gui";
 
 // Required side effects to populate the Create methods on the mesh class. Without this, the bundle would be smaller but the createXXX methods from mesh would not be accessible.
 import "@babylonjs/core/Meshes/meshBuilder";
@@ -54,6 +57,64 @@ class GUIScene extends GameScene {
 		this._camera.setTarget(Vector3.Zero());
 
 		this._rootUI = AdvancedDynamicTexture.CreateFullscreenUI("rootUI", true, this._scene);
+
+		const background = new Image();
+		background.domImage = this._system.loader.getAssetByKey("background");
+		background.width = 1;
+		background.height = 1;
+
+		this._rootUI.addControl(background);
+
+		this._setupGameplayButtons(this._rootUI);
+	}
+
+	_setupGameplayButtons(parent) {
+		const buttonsContainer = new StackPanel();
+		buttonsContainer.isVertical = false;
+
+		const managementButtonContainer = new StackPanel();
+		managementButtonContainer.height = "120px";
+		managementButtonContainer.width = "150px";
+		buttonsContainer.addControl(managementButtonContainer);
+
+		const managementButton = Button.CreateImageOnlyButton("managementButton", "");
+		managementButton.image.domImage = this._system.loader.getAssetByKey("managementIcon");
+		managementButton.width = "100px";
+		managementButton.height = "100px";
+		managementButton.thickness = 0;
+		managementButtonContainer.addControl(managementButton);
+
+		managementButton.onPointerClickObservable.add(this._showManagementPanel.bind(this));
+
+		const managementText = new TextBlock();
+		managementText.fontSize = 12;
+		managementText.text = "Management";
+		managementText.width = "100px";
+		managementText.height = "20px";
+		managementButtonContainer.addControl(managementText);
+
+		const teachersButtonContainer = new StackPanel();
+		teachersButtonContainer.height = "120px";
+		teachersButtonContainer.width = "150px";
+		buttonsContainer.addControl(teachersButtonContainer);
+
+		const teachersButton = Button.CreateImageOnlyButton("teachersButton", "");
+		teachersButton.image.domImage = this._system.loader.getAssetByKey("teacherIcon");
+		teachersButton.width = "100px";
+		teachersButton.height = "100px";
+		teachersButton.thickness = 0;
+		teachersButtonContainer.addControl(teachersButton);
+
+		teachersButton.onPointerClickObservable.add(this._showTeachersPanel.bind(this));
+
+		const teachersText = new TextBlock();
+		teachersText.fontSize = 12;
+		teachersText.text = "Teachers";
+		teachersText.width = "100px";
+		teachersText.height = "20px";
+		teachersButtonContainer.addControl(teachersText);
+
+		parent.addControl(buttonsContainer);
 	}
 
 	loadAsset(key) {
@@ -85,6 +146,14 @@ class GUIScene extends GameScene {
 		this._openWindow(popup);
 
 		this._rootUI.addControl(popup);
+	}
+
+	_showManagementPanel() {
+		console.log("Show Management Panel");
+	}
+
+	_showTeachersPanel() {
+		console.log("Show Teachers Panel");
 	}
 
 	_onToggleMouse() {

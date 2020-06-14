@@ -27,6 +27,9 @@ class GameplayScene extends GameScene {
 		this._system.loader.add("greenButton_Off", "content/images/green_button_off.png", { task: ImageAssetTask });
 		this._system.loader.add("windowPanel", "content/images/window_green.png", { task: ImageAssetTask });
 		this._system.loader.add("greyCircle", "content/images/grey_circle.png", { task: ImageAssetTask });
+		this._system.loader.add("teacherIcon", "content/images/teacher_icon.png", { task: ImageAssetTask });
+		this._system.loader.add("managementIcon", "content/images/management_icon.png", { task: ImageAssetTask });
+		this._system.loader.add("background", "content/images/background.jpg", { task: ImageAssetTask });
 
 		// Load GUI sounds
 		this._system.loader.add("clickSFX", "content/audio/click.ogg");

@@ -30,11 +30,9 @@ class GameState {
 		const hasTimeIncreased = this._time.current > previousTime;
 
 		if (hasTimeIncreased) {
-			if (this._time.current % 4 === 0) {		// Every month...
-				this._university.paySalaries();
-			}
+			this._university.paySalaries(); // Every month...
 
-			if (this._time.current % 24 === 0) {	// Every semester...
+			if (this._time.current % 6 === 0) {	// Every semester...
 				this._university.earnTuition();
 			}
 		}
